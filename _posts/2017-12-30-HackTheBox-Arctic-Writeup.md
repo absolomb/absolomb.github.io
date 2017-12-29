@@ -1,3 +1,8 @@
+---
+layout: post
+title: HackTheBox Arctic Writeup
+---
+
 I did this box quite some time ago as it was one of the first ones I did when first starting HackTheBox. I recently helped out someone who was working on this box
 so I decided to reorganize my notes, as they were somewhat of a mess and restructure them for a proper writeup.
 
@@ -168,7 +173,7 @@ From here we identify the box is running Server 2008 R2 and also has no patches 
 
 After looking through the output I found a few privilege escalation exploits that could work. I settled on looking into MS10-059.
 
-https://www.exploit-db.com/exploits/14610/
+[https://www.exploit-db.com/exploits/14610/]
 
 The Exploit-DB download only contained source files and no compiled exe. For whatever reason the exploit has an alias name of Chimichurri as referenced on Exploit-DB so I also searched by that and was able to find a compiled exe on Github [here](https://github.com/Re4son/Chimichurri). Note that normally you want compile things yourself but I wasn't able to do so myself without installing a ton of stuff so I decided to forgo it. Based on the source code it looks like the exploit will send us a reverse shell by feeding our IP address and desired port as parameters.
 
