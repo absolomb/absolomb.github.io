@@ -15,13 +15,13 @@ After my 60 days of lab time was up, I decided to renew for another 30 days. At 
 
 First exam attempt I managed 2 roots shells and 2 low privileged shells. I got severly stuck on privilege escalation for hours and came up with nothing finally giving up around 6am after starting at 7am the previous day. I decided to not even submit my report. After the failure I experienced extreme burnout after four months of straight work towards the certification. I winded up taking 3 months off and didn't even touch Kali again until the beginning of 2017.
 
-I finally got motivated again and instead of purchasing more lab time I decided to start working on Vulnhub boxes. I managed to do around ten of them and during this time I also reviewed notes, joined a slack group, and read a couple books and a ton of articles. I scheduled my second attempt at the end of March. 
+I finally got motivated again and instead of purchasing more lab time I decided to start working on Vulnhub boxes. I managed to do around ten of them and during this time I also reviewed notes, joined an infosec slack group, and read a couple books and a ton of articles. I scheduled my second attempt at the end of March. 
 
-Second attempt of the exam, I got 3 root shells. Once again I failed. I went on a vacation and came back with a fresh mind. I bought 30 days of lab time and winded up taking down the rest of the boxes in the OSCP lab including Sufferance and Humble. After finishing up, I scheduled my exam for July giving me a month and a half or so of time inbetween. Something new popped up in the slack that I'm apart of called hackthebox. At the time it was still in beta and very limited. It has grown quite a bit now and is an excellent resource. I winded up taking a look at that as they were releasing new boxes weekly. I spent the time before my exam doing lots of hackthebox and it really paid off. I was able to really get my methodology down even more and work on my weak areas. Privilege escalation became somewhat of a strong point. 
+Second attempt of the exam, I got 3 root shells. Once again I failed. I went on a vacation and came back with a fresh mind. I bought 30 days of lab time and winded up taking down the rest of the boxes in the OSCP lab including Sufferance and Humble. After finishing up, I scheduled my exam for July giving me a month and a half or so of time inbetween. Something new called hackthebox started popping up in the slack that I'm apart of. At the time it was still in beta and very limited. It has grown quite a bit since then and is an excellent resource. I winded up taking a look at that as they were releasing new boxes weekly and constantly downloading and setting up vulnhubs can be cumbersome. I spent the time before my exam doing lots of hackthebox and it really paid off. I was able to really get my methodology down even more and work on my weak areas. Privilege escalation even became somewhat of a strong point. 
 
-I finally felt fully prepared and started the exam at 8am on a Friday. Within the first four hours I was certain I was going to fail again after only getting one shell. After taking a short break to go to the gym and coming back I settled back in and was able to find my way into the other boxes. I got stuck on Windows privilege escalation for hours on one box, thinking it was so locked down and impossible. I decided to start my enumeration over and found I missed something so simple the first time around. 
+I finally felt fully prepared and started my third exam attempt at 8am on a Friday. Within the first four hours I was certain I was going to fail again after only getting one shell. After taking a short break to go to the gym and coming back I settled back in and was able to find my way into the other boxes. I got stuck on Windows privilege escalation for hours on one box, thinking it was so locked down and impossible. I decided to start my enumeration over from the beginning and found I missed something so simple the first time around.
 
-At 9pm I had four out of five roots. I knew I passed at that point and debated on just calling it a night since the last box I seemed to have absolutely no idea on. I took a short break and decided to look at the last box again. I winded up finding something within the first ten minutes and had a shell in no time. Privilege escalation was also found in no time and I finished with five out of five roots! With the exam report submitted the following day, a couple days later I got the email that took over a year to get. 
+Around 9pm I had four out of five roots. I knew I passed at that point and debated on just calling it a night since the last box I seemed to have absolutely no idea on. I took a short break and decided to look at the last box again. I winded up finding something within the first ten minutes and had a shell in no time. The path for privilege escalation was also found quickly and I finished with five out of five roots! With the exam report submitted the following day, a couple days later I got the email that took over a year to get. 
 
 ![OSCP](/img/oscp.png)
 
@@ -29,7 +29,7 @@ This was certainly the hardest thing I had done thus far in my IT career and the
 
 ### Lessons Learned:
 
-Before starting the OSCP labs I would recommend making sure you're able to satisfy the requirements OffSec posts as well as:
+#### Pre-Lab Time:
 
 - Get familiar with Kali and some of the tools. 
 
@@ -37,9 +37,9 @@ Before starting the OSCP labs I would recommend making sure you're able to satis
 
 - Check out [HackTheBox](https://www.hackthebox.eu/), start with easy machines and work up. Retired machines have writeups.
 
-When starting the labs:
+#### When starting the labs:
 
-- Do the course materials all the way through first. Depending on experience you can probably skip some of it. Also document all of your exercises during this time so you don't have to do it later if you want the extra 5 points for the lab report. Coming back to do this later will be a burden. 
+- Do the course materials all the way through first. Also document all of your exercises during this time so you don't have to do it later if you want the extra 5 points for the lab report. Coming back to do this later will be a burden. 
 
  - Do not get root happy and start trying to own boxes as fast as possible without understanding what you are doing.
 
@@ -51,7 +51,7 @@ When starting the labs:
 
 - Make sure you do proper post enumeration after rooting a box. Do not just grab the flag and go. Look for files, search logs, network connections, etc. Some boxes have dependencies!
 
-Exam Tips:
+#### Exam Tips:
 
 Besides the usual get rest and plenty of sleep the night before here's what I recommend:
 
