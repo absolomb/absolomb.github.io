@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HackTheBox Arctic Writeup
+title: HackTheBox - Arctic Writeup
 ---
 
 I did this box quite some time ago as it was one of the first ones I did when first starting HackTheBox. I recently helped out someone who was working on this box
