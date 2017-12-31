@@ -8,7 +8,7 @@ so I decided to reorganize my notes, as they were somewhat of a mess and restruc
 
 ### Initial Enumeration
 
-First, let's start with a quick nmap scan to see what we get.
+First, let's start with a quick nmap scan.
 ```
 root@kali:~/htb/arctic# nmap -sV 10.10.10.11
 
