@@ -679,7 +679,6 @@ table tr td :last-child {
 pre {
   font-size: 16px;
   line-height: 1.5em;
-  padding: 5px 5px 5px 5px;
 }
 pre code {
   white-space: pre;
@@ -707,7 +706,8 @@ td.code pre {
   border-radius: 0;
 }
 td.gutter {
-  padding-top: 3px;
+  padding-top: 5px;
+  padding-left: 5px;
 }
 
 /* --- Social media sharing section --- */
