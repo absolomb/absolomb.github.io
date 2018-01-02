@@ -689,7 +689,6 @@ pre.highlight, .highlight > pre, td.code pre {
   background-repeat: repeat;
   background-size: 3em 3em;
   background-position: 0px 10px;
-  border-left: 7px solid #333;
 }
 code table, code table td, code table th, code table tbody, code table tr,
 td.gutter pre {
@@ -701,7 +700,7 @@ td.gutter pre {
   padding: 0;
 }
 td.code pre {
-  border-width: 0 0 0 2px;
+  border-width: 10px 0 10px 10px;
   border-style: solid;
   border-color: #333;
   border-radius: 0;
