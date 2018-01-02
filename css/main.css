@@ -685,7 +685,7 @@ pre code {
 }
 pre.highlight, .highlight > pre, td.code pre {
   color: #FFF;
-  background: #000;
+  background: #444;
   background-repeat: repeat;
   background-size: 3em 3em;
   background-position: 0px 10px;
