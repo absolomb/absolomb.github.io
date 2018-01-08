@@ -17,7 +17,7 @@ baseurl: ""
 title: absolomb's blog
 
 # Short description of your site
-description: sysadmin venturing into infosec
+description: infosec enthusiast
 
 # --- Navigation bar options --- #
 
@@ -96,7 +96,7 @@ share-links-active:
 #disqus: ""
 
 # Fill in your Google Analytics ID to track your website using GA
-#google_analytics: ""
+google_analytics: "UA-112132668-1"
 
 # Google Tag Manager ID
 #gtm: ""
