@@ -24,11 +24,10 @@ description:
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  HackTheBox: 
-  - Arctic: 2017-12-29-HackTheBox-Arctic-Writeup
-  - Joker: 2017-12-30-HackTheBox-Joker-Writeup
-  UnderTheWire: 
-  - Legacy: 2018-01-16-UnderTheWire-Century.md
+  Write-Ups: 
+  - HTB-Arctic: 2017-12-29-HackTheBox-Arctic-Writeup
+  - HTB-Joker: 2017-12-30-HackTheBox-Joker-Writeup 
+  - UTW-Legacy: 2018-01-16-UnderTheWire-Century
     #- GitHub Pages: "https://pages.github.com/"
   #Author's home: "http://deanattali.com"
 
