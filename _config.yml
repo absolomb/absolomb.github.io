@@ -24,10 +24,10 @@ description:
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
- HackTheBox: 
-  - Arctic: _posts/2017-12-29-HackTheBox-Arctic-Writeup.md
-  - Joker: _posts/2017-12-30-HackTheBox-Joker-Writeup.md
-UnderTheWire: 
+  HackTheBox: 
+  - Arctic: _posts/2017-12-29-HackTheBox-Arctic-Writeup
+  - Joker: _posts/2017-12-30-HackTheBox-Joker-Writeup
+  UnderTheWire: 
   - Legacy: _posts/2018-01-16-UnderTheWire-Century.md
     #- GitHub Pages: "https://pages.github.com/"
   #Author's home: "http://deanattali.com"

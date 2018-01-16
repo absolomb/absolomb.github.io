@@ -7,7 +7,7 @@ If you aren't familiar with the famous OverTheWire challenges do check them out.
 
 Century is the first in the series and a great introduction to doing some simple things in Powershell. Below are my solutions to each challenge.
 
-## Century 1 -> 2
+## Century 2
 
 The password for Century2 is the build version of the instance of PowerShell installed on this system. 
 
@@ -28,7 +28,7 @@ SerializationVersion           1.1.0.1
 ```
 The password is `10.0.14409.1012`
 
-## Century 2 -> 3
+## Century 3
 
 The password for Century3 is the name of the built-in cmdlet that performs the wget like function within PowerShell PLUS the name of the file on the desktop. 
 
@@ -51,7 +51,7 @@ Simple one here, we grab the filename off the desktop. The wget equivalent in Po
 
 Password is `invoke-webrequest80`
 
-## Century 3 -> 4
+## Century 4
 
 The password for Century4 is the number of files on the desktop. 
 
@@ -70,7 +70,7 @@ We can use `Get-ChildItem` to list everything on the desktop and pipe it into `M
 
 Password is `517`
 
-## Century 4 -> 5
+## Century 5
 
 The password for Century5 is the name of the file within a directory on the desktop that has spaces in its name. 
 
@@ -91,7 +91,7 @@ Here we just add a `Recurse` option to get inside of the folders and list all fi
 
 Password is `65536`
 
-## Century 5 -> 6
+## Century 6
 
 The password for Century6 is the short name of the domain in which this system resides in PLUS the name of the file on the desktop. 
 
@@ -118,7 +118,7 @@ We can grab environment variables through `env:` and filter the name to only sho
 
 Password is `underthewire_4321`
 
-## Century 6 -> 7
+## Century 7
 
 The password for Century7 is the number of folders on the desktop. 
 
@@ -137,7 +137,7 @@ Similar to what we did earlier except now we can add the `Directory` option to o
 
 Password is `416`
 
-## Century 7 -> 8
+## Century 8
 
 The password for Century8 is in a readme file somewhere within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile. 
 
@@ -152,7 +152,7 @@ Here we are going to recursively search and set a filter to match any file start
 
 Password is `human_versus_computer`
 
-## Century 8 -> 9
+## Century 9
 
 The password for Century9 is the number of unique entries within the file on the desktop. 
 
@@ -172,7 +172,7 @@ Command line here is pretty self explanatory.
 
 Password is `511`
 
-## Century 9 -> 10
+## Century 10
 
 The password for Century10 is the 161st element within the file on the desktop. 
 
@@ -196,7 +196,7 @@ Again nothing crazy, just adding the `Index` option and specifying exactly where
 
 Password is `shark`
 
-## Century 10 -> 11
+## Century 11
 
 The password for Century11 is the 10th and 8th word of the Windows Update service description combined PLUS the name of the file on the desktop. 
 
@@ -226,7 +226,7 @@ For whatever reason `Get-Service` as of now won't return the description of a se
 
 Password is `windowsupdates_4u`
 
-## Century 11 -> 12
+## Century 12
 
 The password for Century12 is the name of the hidden file within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile. 
 
@@ -258,7 +258,7 @@ The first get-childitem grabs all the folders in the user profile that aren't hi
 
 Password is `secret_sauce`
 
-## Century 12 -> 13
+## Century 13
 
 The password for Century13 is the description of the computer designated as a Domain Controller within this domain PLUS the name of the file on the desktop.
 
@@ -299,7 +299,7 @@ Mode                LastWriteTime         Length Name
 
 Password is `i_authenticate_things`
 
-## Century 13 -> 14
+## Century 14
 
 The password for Century14 is the number of words within the file on the desktop. 
 
@@ -315,7 +315,7 @@ Another similar challenge from earlier however this time we specify the `Word` o
 
 Password is `475361`
 
-## Century 14 -> 15
+## Century 15
 
 The password for Century15 is the number of times the word "polo" appears within the file on the desktop 
 
