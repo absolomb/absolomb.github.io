@@ -17,16 +17,19 @@ baseurl: ""
 title: absolomb's blog
 
 # Short description of your site
-description: infosec enthusiast
+description: 
 
 # --- Navigation bar options --- #
 
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  #Resources:
-   # - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
-    #- Learn markdown: "http://www.markdowntutorial.com/"
+  Write Ups:
+    - HackTheBox: 
+      - Arctic: _posts/2017-12-29-HackTheBox-Arctic-Writeup.md
+      - Joker: _posts/2017-12-30-HackTheBox-Joker-Writeup.md
+    - UnderTheWire: 
+      - Legacy: _posts/2018-01-16-UnderTheWire-Century.md
     #- GitHub Pages: "https://pages.github.com/"
   #Author's home: "http://deanattali.com"
 
