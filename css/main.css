@@ -429,9 +429,12 @@ footer .theme-by {
   }
 }
 @media only screen and (max-width: 500px) {
-  font-size: 10px;
+  body {
+    font-size: 12px;
+  }
+  
   .post-entry-container {
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 
