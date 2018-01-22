@@ -430,11 +430,11 @@ footer .theme-by {
 }
 @media only screen and (max-width: 500px) {
   body {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   .post-entry-container {
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
@@ -689,13 +689,17 @@ pre {
   font-size: 16px;
   line-height: 1.5em;
 }
+
 @media only screen and (max-width: 500px) {
  
   pre {
     font-size: 11.5px;
     line-height: 1.5em;
+    white-space: nowrap;
+    overflow-x: auto;
   }
 }
+
 pre code {
   white-space: pre;
 }
