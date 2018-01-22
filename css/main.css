@@ -430,6 +430,9 @@ footer .theme-by {
 }
 
 @media only screen and (max-width: 320px) {
+  .post-entry {
+    font-size: 12px;
+  }
   .post-image, .post-image img {
     height: 100px;
     width: 100px;
