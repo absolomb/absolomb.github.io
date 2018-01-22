@@ -702,6 +702,15 @@ pre {
 
 pre code {
   white-space: pre;
+
+}
+
+@media only screen and (max-width: 500px) {
+ 
+  pre code {
+    white-space: nowrap;
+    overflow-x: auto;
+  }
 }
 pre.highlight, .highlight > pre, td.code pre {
   color: #FFF;
