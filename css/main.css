@@ -696,8 +696,8 @@ pre {
 @media only screen and (max-width: 500px) {
  
   pre {
-    font-size: 13px;
-    line-height: 1.5em;
+    font-size: 12px;
+    line-height: 1em;
 
 }
 pre code {
