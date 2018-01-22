@@ -430,7 +430,7 @@ footer .theme-by {
 }
 @media only screen and (max-width: 500px) {
   body {
-    font-size: 13px;
+    font-size: 14px;
   }
   pre {
     font-size: 13px;
@@ -438,7 +438,7 @@ footer .theme-by {
   }
   
   .post-entry-container {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
@@ -692,6 +692,13 @@ table tr td :last-child {
 pre {
   font-size: 16px;
   line-height: 1.5em;
+}
+@media only screen and (max-width: 500px) {
+ 
+  pre {
+    font-size: 13px;
+    line-height: 1.5em;
+
 }
 pre code {
   white-space: pre;
