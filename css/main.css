@@ -705,13 +705,10 @@ pre code {
 }
 
 @media only screen and (max-width: 500px) {
-
-  code {
-    white-space: pre;
-  }
  
   pre code {
     white-space: pre;
+    width: 400px;
   }
 }
 
