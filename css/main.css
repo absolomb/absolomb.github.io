@@ -696,7 +696,6 @@ pre {
     font-size: 11.5px;
     line-height: 1.5em;
     white-space: nowrap;
-    overflow-x: auto;
   }
 }
 
@@ -708,7 +707,7 @@ pre code {
 @media only screen and (max-width: 500px) {
  
   pre code {
-    overflow-x: auto;
+    white-space: pre;
   }
 }
 pre.highlight, .highlight > pre, td.code pre {
