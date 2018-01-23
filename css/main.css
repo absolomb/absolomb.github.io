@@ -695,7 +695,7 @@ pre {
   pre {
     font-size: 11.5px;
     line-height: 1.5em;
-    width: 100%;
+    width: 400px;
   }
 }
 
@@ -708,7 +708,6 @@ pre code {
  
   pre code {
     white-space: pre;
-    width: 400px;
   }
 }
 
