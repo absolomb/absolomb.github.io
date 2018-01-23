@@ -695,21 +695,13 @@ pre {
   pre {
     font-size: 11.5px;
     line-height: 1.5em;
-    width: 400px;
-    margin: auto;    
+    word-wrap: normal;    
   }
 }
 
 pre code {
   white-space: pre;
 
-}
-
-@media only screen and (max-width: 500px) {
- 
-  pre code {
-    white-space: pre;
-  }
 }
 
 pre.highlight, .highlight > pre, td.code pre {
