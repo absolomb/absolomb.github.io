@@ -708,6 +708,7 @@ pre code {
  
   pre code {
     white-space: pre;
+    width: 100%;
   }
 }
 pre.highlight, .highlight > pre, td.code pre {
