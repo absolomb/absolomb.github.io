@@ -9,10 +9,12 @@ Century is the first in the series and a great introduction to doing some simple
 
 ## Century 2
 
-The password for Century2 is the build version of the instance of PowerShell installed on this system. 
+_The password for Century2 is the build version of the instance of PowerShell installed on this system._
 
+Easy one here, we can call a system variable to do the job.
 
 ```powershell
+
 PS C:\Users\century1\Documents> $PSVersionTable
 
 Name                           Value
@@ -25,15 +27,18 @@ CLRVersion                     4.0.30319.42000
 WSManStackVersion              3.0
 PSRemotingProtocolVersion      2.3
 SerializationVersion           1.1.0.1
+
 ```
 The password is `10.0.14409.1012`
 
 ## Century 3
 
-The password for Century3 is the name of the built-in cmdlet that performs the wget like function within PowerShell PLUS the name of the file on the desktop. 
+_The password for Century3 is the name of the built-in cmdlet that performs the wget like function within PowerShell PLUS the name of the file on the desktop._
 
+We grab the filename off the desktop. The wget equivalent in Powershell is `Invoke-WebRequest`.
 
 ```powershell
+
 PS C:\Users\century2\Documents> Get-ChildItem ..\desktop\
 
 
@@ -46,16 +51,20 @@ Mode                LastWriteTime         Length Name
 
 
 PS C:\Users\century2\desktop> Invoke-WebRequest
+
 ```
-Simple one here, we grab the filename off the desktop. The wget equivalent in Powershell is `Invoke-WebRequest`.
+
 
 Password is `invoke-webrequest80`
 
 ## Century 4
 
-The password for Century4 is the number of files on the desktop. 
+_The password for Century4 is the number of files on the desktop._
+
+We can use `Get-ChildItem` to list everything on the desktop and pipe it into `Measure-Object` to give us a count.
 
 ```powershell
+
 PS C:\Users\century3\Documents> Get-ChildItem ..\desktop\ | Measure-Object
 
 
@@ -65,17 +74,19 @@ Sum      :
 Maximum  :
 Minimum  :
 Property :
+
 ```
-We can use `Get-ChildItem` to list everything on the desktop and pipe it into `Measure-Object` to give us a count.
 
 Password is `517`
 
 ## Century 5
 
-The password for Century5 is the name of the file within a directory on the desktop that has spaces in its name. 
+_The password for Century5 is the name of the file within a directory on the desktop that has spaces in its name._
 
+Here we just add a `Recurse` option to get inside of the folders and list all files.
 
 ```powershell
+
 PS C:\Users\century4\Documents> get-childitem ..\desktop\ -Recurse
 
 
@@ -86,15 +97,16 @@ Directory: C:\Users\century4\desktop\500
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----         6/8/2017   4:19 PM              0 65536
+
 ```
-Here we just add a `Recurse` option to get inside of the folders and list all files.
 
 Password is `65536`
 
 ## Century 6
 
-The password for Century6 is the short name of the domain in which this system resides in PLUS the name of the file on the desktop. 
+_The password for Century6 is the short name of the domain in which this system resides in PLUS the name of the file on the desktop._ 
 
+We can grab environment variables through `env:` and filter the name to only show `USERDOMAIN` which is the shortname, the long name of the domain would be under `USERDNSDOMAIN`
 
 ```powershell
 
@@ -113,16 +125,19 @@ PS C:\Users\century5\Documents> Get-ChildItem ..\desktop\
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----         6/8/2017   4:20 PM              0 _4321
+
 ```
-We can grab environment variables through `env:` and filter the name to only show `USERDOMAIN` which is the shortname, the long name of the domain would be under `USERDNSDOMAIN`
 
 Password is `underthewire_4321`
 
 ## Century 7
 
-The password for Century7 is the number of folders on the desktop. 
+_The password for Century7 is the number of folders on the desktop._
+
+Similar to what we did earlier except now we can add the `Directory` option to only give us folders back.
 
 ```powershell
+
 PS C:\Users\century6> get-childitem .\Desktop\ -Directory | Measure-Object
 
 
@@ -132,31 +147,35 @@ Sum      :
 Maximum  :
 Minimum  :
 Property :
+
 ```
-Similar to what we did earlier except now we can add the `Directory` option to only give us folders back.
 
 Password is `416`
 
 ## Century 8
 
-The password for Century8 is in a readme file somewhere within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile. 
+_The password for Century8 is in a readme file somewhere within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile._ 
 
+Here we are going to recursively search and set a filter to match any file starting with readme.
 
 ```powershell
+
 PS C:\Users\century7\Documents> Get-ChildItem ..\ -Recurse -File -Filter readme* | get-content
 
 human_versus_computer
 
 ```
-Here we are going to recursively search and set a filter to match any file starting with readme.
 
 Password is `human_versus_computer`
 
 ## Century 9
 
-The password for Century9 is the number of unique entries within the file on the desktop. 
+_The password for Century9 is the number of unique entries within the file on the desktop._ 
+
+Command line here is pretty self explanatory.
 
 ```powershell
+
 PS C:\Users\century8\Desktop> Get-Content .\Unique.txt | Sort-Object | Get-Unique | Measure-Object
 
 
@@ -166,17 +185,19 @@ Sum      :
 Maximum  :
 Minimum  :
 Property :
-```
 
-Command line here is pretty self explanatory.
+```
 
 Password is `511`
 
 ## Century 10
 
-The password for Century10 is the 161st element within the file on the desktop. 
+_The password for Century10 is the 161st element within the file on the desktop._
+
+Again nothing crazy, just adding the `Index` option and specifying exactly where we want to return.
 
 ```powershell
+
 PS C:\Users\century9\Desktop> Get-ChildItem
 
 
@@ -191,17 +212,19 @@ Mode                LastWriteTime         Length Name
 PS C:\Users\century9\Desktop> Get-Content .\words.txt | Select-Object -Index 161
 
 shark
+
 ```
-Again nothing crazy, just adding the `Index` option and specifying exactly where we want to return.
 
 Password is `shark`
 
 ## Century 11
 
-The password for Century11 is the 10th and 8th word of the Windows Update service description combined PLUS the name of the file on the desktop. 
+_The password for Century11 is the 10th and 8th word of the Windows Update service description combined PLUS the name of the file on the desktop._
 
+For whatever reason `Get-Service` as of now won't return the description of a service, so we have to look to WMI to grab it.
 
 ```powershell
+
 PS C:\Users\century10> Get-WmiObject win32_Service -Filter "DisplayName = 'Windows Update'" | Select-Object -Property Description | ft -Wrap
 
 Description
@@ -221,17 +244,18 @@ Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----         6/8/2017   4:57 PM              0 _4u
 
-```
-For whatever reason `Get-Service` as of now won't return the description of a service, so we have to look to WMI to grab it. 
+``` 
 
 Password is `windowsupdates_4u`
 
 ## Century 12
 
-The password for Century12 is the name of the hidden file within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile. 
+_The password for Century12 is the name of the hidden file within the contacts, desktop, documents, downloads, favorites, music, or videos folder in the user's profile._
 
+First we will use `Get-ChildItem`  to grab all the folders in the user profile that aren't hidden, otherwise we'll be searching through our AppData folder and that will return a lot of results. Then we can search for all hidden files, where the name does not equal `desktop.ini` to cut down on unnecessary results.
 
 ```powershell
+
 PS C:\Users\century11> Get-ChildItem | Get-ChildItem -Recurse -File -Hidden | Where-Object {$_.Name -ne 'desktop.ini'}
 
 
@@ -254,15 +278,16 @@ Mode                LastWriteTime         Length Name
 
 ```
 
-The first get-childitem grabs all the folders in the user profile that aren't hidden, otherwise we'll be searching through our AppData folder and that will return a lot of results. Then we search for all hidden files, where the name does not equal `desktop.ini` to cut down on unnecessary results.
-
 Password is `secret_sauce`
 
 ## Century 13
 
-The password for Century13 is the description of the computer designated as a Domain Controller within this domain PLUS the name of the file on the desktop.
+_The password for Century13 is the description of the computer designated as a Domain Controller within this domain PLUS the name of the file on the desktop._
+
+`Get-ADDomainController` will not return the AD attribute description so we will have to feed the computer name into Get-ADComputer and make sure we specify we want the `Description` property returned.
 
 ```powershell
+
 PS C:\Users\century12> Get-ADDomainController | Select-Object name
 
 name
@@ -295,15 +320,17 @@ Mode                LastWriteTime         Length Name
 -a----         6/8/2017   5:09 PM              0 _things
 
 ```
-`Get-ADDomainController` will not return the AD attribute description so we will have to feed the computer name into Get-ADComputer and make sure we specify we want the `Description` property returned.
 
 Password is `i_authenticate_things`
 
 ## Century 14
 
-The password for Century14 is the number of words within the file on the desktop. 
+_The password for Century14 is the number of words within the file on the desktop._
+
+Another similar challenge from earlier however this time we specify the `Word` option. If you don't you'll see the line count is returned instead giving you a 1.
 
 ```powershell
+
 PS C:\Users\century13> Get-ChildItem .\Desktop | get-content | Measure-Object -Word
 
 Lines  Words Characters Property
@@ -311,15 +338,17 @@ Lines  Words Characters Property
       475361
 
 ```
-Another similar challenge from earlier however this time we specify the `Word` option. If you don't you'll see the line count is returned instead giving you a 1.
 
 Password is `475361`
 
 ## Century 15
 
-The password for Century15 is the number of times the word "polo" appears within the file on the desktop 
+_The password for Century15 is the number of times the word "polo" appears within the file on the desktop_
+
+We use `Select-String` to filter our pattern of `polo` and then pipe it to get our count.
 
 ```powershell
+
 PS C:\Users\century14\Desktop> get-content .\stuff.txt | Select-String -Pattern "polo" | Measure-Object
 
 
@@ -331,7 +360,6 @@ Minimum  :
 Property :
 
 ```
-We use `Select-String` to filter our pattern of `polo` and then pipe it to get our count.
 
 Password is `10`
 
