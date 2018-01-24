@@ -138,7 +138,7 @@ Mode                LastWriteTime         Length Name
 
  Password is `grits_eggs`
 
- ## Cyborg 6
+## Cyborg 6
 
 _The password for cyborg6 is the last name of the user who has logon hours set on their account PLUS the name of the file on the desktop._
 
@@ -210,9 +210,12 @@ The password is cybergeddon
  ```
 
  Alright so this one is a little tricky. First we will set a variable named `$base64` with the contents of our file. 
- Next we will have to use .NET classes and methods to get the rest of the job done since there is not cmdlet currently that will do the leg work for us. First the `[System.Text.Encoding]`class is called, followed by two colons. The double-colon accesses methods on a class, which for the first part is the `UTF8.GetString` method. Inside of this method we are calling the `System.Convert` class along with it's `FromBase64String` method to decode our variable properly. 
+ Next we will have to use .NET classes and methods to get the rest of the job done since there is not cmdlet currently that will do the leg work for us. 
  
- So you may be wondering why you can't just call the `System.Convert` class and the method `FromBase64String` to get our answer. 
+ First the `[System.Text.Encoding]`class is called, followed by two colons. The double-colon accesses methods on a class, which for the first part is the `UTF8.GetString` method. Inside of this method we are calling the `System.Convert` class along with it's `FromBase64String` method to decode our variable properly. 
+ 
+ So you may be wondering why you can't just call the `System.Convert` class and the method `FromBase64String` to get our answer.
+
  Well let's break this down for further understanding and do just that.
 
  ```powershell
@@ -274,9 +277,9 @@ Hopefully this makes a little more sense now, rather than just copying and pasti
 
 _The password for cyborg8 is the executable name of a program that will start automatically when cyborg7 logs in._ 
 
- `Get-ChildItem` won't do the job here. We'll have to use `Get-ItemProperty` instead.
+`Get-ChildItem` won't do the job here. We'll have to use `Get-ItemProperty` instead.
 
- ```powershell
+```powershell
 
 PS C:\Users\cyborg7\Documents> Get-ItemProperty "hkcu:\Software\Microsoft\Windows\CurrentVersion\Run"
 
@@ -475,7 +478,6 @@ Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----         6/7/2017   4:58 PM              0 _heart
 
-
 ```
 Password is `qzpc_heart`
 
@@ -509,7 +511,6 @@ PS C:\Users\cyborg13\Documents> Get-ChildItem ..\Desktop
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----        6/12/2017   7:59 PM              0 _days
-
 
 ```
 
