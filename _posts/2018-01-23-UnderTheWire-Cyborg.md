@@ -1,6 +1,7 @@
 ---
 layout: post
 title: UnderTheWire Cyborg
+tags: [underthewire]
 ---
 
 The Cyborg challenges are the next set of UnderTheWire challenges following Century. These were a little more advanced 

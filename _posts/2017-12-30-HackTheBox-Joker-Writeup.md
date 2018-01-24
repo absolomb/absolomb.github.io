@@ -1,6 +1,7 @@
 ---
 layout: post
 title: HackTheBox - Joker Writeup
+tags: [hackthebox]
 ---
 
 This is probably the first hard box that I actually enjoyed on HackTheBox. Most of the things clicked and I was able to get through much of it fairly quickly overall. Highly recommend this one.  
