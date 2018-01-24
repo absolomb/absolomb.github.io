@@ -9,10 +9,10 @@ title: HackTheBox WriteUps
     <a href="{{ post.url | prepend: site.baseurl }}">
 	  <h2 class="post-title">{{ post.title }}</h2>
 
-	  {% if post.subtitle %}
-	  <h3 class="post-subtitle">
+	{% if post.subtitle %}
+	<h3 class="post-subtitle">
 	    {{ post.subtitle }}
-	  </h3>
+	</h3>
 	  {% endif %}
     </a>
 
@@ -35,4 +35,4 @@ title: HackTheBox WriteUps
           <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more">[Read&nbsp;More]</a>
         {% endif %}
       </div>
-    </div>
+</div>
