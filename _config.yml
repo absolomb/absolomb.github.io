@@ -56,14 +56,15 @@ avatar: "/img/sploitspren.png"
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
   name: Ryan McFarland
-  github: absolomb    # eg. daattali
+  github: absolomb
+  email: blog@sploitspren.com   
   
 
 # Select which links to show in the footer
 footer-links-active:
   rss: false
   facebook: false
-  email: false
+  email: true
   twitter: false
   google-plus: false
   github: true
