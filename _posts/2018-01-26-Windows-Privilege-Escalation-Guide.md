@@ -399,7 +399,7 @@ dir /s *pass* == *vnc* == *.config* 2>nul
 ```
 
 ```powershell
-Get-Childitem –Path C:\Users\ -Include *password*,*vnc* -File -Recurse -ErrorAction SilentlyContinue
+Get-Childitem –Path C:\Users\ -Include *password*,*vnc*,*.config -File -Recurse -ErrorAction SilentlyContinue
 ```
 
 Files containing password inside them?
