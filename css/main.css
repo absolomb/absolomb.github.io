@@ -8,7 +8,7 @@ layout: null
 
 body {
   font-family: 'Lora', 'Times New Roman', serif;
-  font-size: 16px;
+  font-size: 17px;
   color: #404040;
   position: relative;
   background: #FFF;
@@ -707,6 +707,7 @@ pre code {
 
 pre.highlight, .highlight > pre, td.code pre {
   color: #FFF;
+  padding: 0.2em 0.4em;
   background: #333;
   background-repeat: repeat;
   background-size: 3em 3em;
