@@ -16,7 +16,9 @@ _Note: I am not an expert and still learning myself._
 
 In each section I first provide the old trusted CMD commands and then also a Powershell equivalent for posterity sake. It's good to have both tools under your belt and Powershell is much more versatile for scripting than the traditional CMD. However there isn't a Powershell equivalent for everything (or CMD is still simply easier/better on certain things), so some sections will only contain regular CMD commands. 
 
+
 ## Operating System
+
 
 What is the OS and architecture? Is it missing any patches? 
 
@@ -56,7 +58,9 @@ Get-PSDrive | where {$_.Provider -like "Microsoft.PowerShell.Core\FileSystem"}| 
 
 ```
 
+
 ## Users
+
 
 Who are you?
 
@@ -161,7 +165,9 @@ Can we access SAM and SYSTEM files?
 
 ```
 
+
 ## Programs, Processes, and Services
+
 
 What software is installed?
 
@@ -311,7 +317,9 @@ reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 
 ```
 
+
 ## Networking
+
 
 What NICs are connected? Are there multiple networks?
 
@@ -404,7 +412,9 @@ Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Services\SNMP -Recurse
 
 ```
 
+
 ## Interesting Files and Sensitive Information
+
 
 This section may be a little noisy so you may want to output commands into txt files to review and parse as you wish.
 
@@ -515,7 +525,10 @@ Get-ChildItem C:\* -include *.xml,*.ini,*.txt,*.config -Recurse -ErrorAction Sil
 
 ```
 
+
 # Appendix
+
+
 ## Transferring Files
 
 At some point during privilege escalation you will need to get files onto your target. Below are some easy ways to do so.
