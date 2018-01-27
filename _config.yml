@@ -23,11 +23,11 @@ description: absolomb's security blog
 
 # List of links in the navigation bar
 navbar-links:
-  About Me: "aboutme"
   Guides: Guides
   Write-Ups: 
   - HackTheBox: HackTheBox
-  - UnderTheWire: UnderTheWire 
+  - UnderTheWire: UnderTheWire
+  About Me: "aboutme"
   
 # Image to show in the navigation bar - image must be a square (width = height)
 # Remove this parameter if you don't want an image in the navbar
@@ -56,7 +56,7 @@ avatar: "/img/sploitspren.png"
 author:
   name: Ryan McFarland
   github: absolomb
-  email: blog@sploitspren.com   
+  email: YmxvZ0BzcGxvaXRzcHJlbi5jb20=
   
 
 # Select which links to show in the footer
