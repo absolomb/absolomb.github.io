@@ -65,6 +65,13 @@ echo %USERNAME%
 $env:UserName
 ```
 
+Any interesting user privileges? _Note: The State column does not mean that the user does or does not have access to this privilege. If the privilege is listed, then that user has it._
+
+```
+whoami /priv
+```
+
+
 What users are on the system? Any old user profiles that weren't cleaned up?
 
 ```
