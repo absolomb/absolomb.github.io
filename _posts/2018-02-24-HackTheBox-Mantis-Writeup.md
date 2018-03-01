@@ -231,7 +231,7 @@ Password:
 
 Let's enumerate the table names inside `orcharddb`.
 
- _Note: I've cleaned up the formatting below, `sqsh` has terrible output formatting. You can output into a CSV file and view in something else however if needed. Soething like ` go -m csv > /root/htb/mantis/table.csv`_
+ _Note: I've cleaned up the formatting below, `sqsh` has terrible output formatting. You can output into a CSV file and view in something else however if needed. Something like `go -m csv > /root/htb/mantis/table.csv`_
 
 ```
 1> SELECT TABLE_NAME FROM orcharddb.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';
