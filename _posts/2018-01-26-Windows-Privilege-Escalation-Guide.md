@@ -201,11 +201,18 @@ tasklist /v
 net start
 sc query
 ```
+_`Get-Process` has a `-IncludeUserName` option to see the process owner, however you have to have administrative rights to use it._
 
 ```powershell
-Get-Process | ft ProcessName,Id
+Get-Process | where {$_.ProcessName -notlike "svchost*"} | ft ProcessName, Id
 Get-Service
 ```
+_This one liner returns the process owner without admin rights, if something is blank under owner it's probably running as SYSTEM, NETWORK SERVICE, or LOCAL SERVICE._
+
+```powershell
+Get-WmiObject -Query "Select * from Win32_Process" | where {$_.Name -notlike "svchost*"} | Select Name, Handle, @{Label="Owner";Expression={$_.GetOwner().User}} | ft -AutoSize
+```
+
 
 Any weak service permissions? Can we reconfigure anything? Again, upload accesschk.
 
@@ -221,6 +228,10 @@ Are there any unquoted service paths?
 wmic service get name,displayname,pathname,startmode 2>nul |findstr /i "Auto" 2>nul |findstr /i /v "C:\Windows\\" 2>nul |findstr /i /v """
 ```
 
+```powershell
+gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
+```
+
 What scheduled tasks are there? Anything custom implemented?
 
 ```
@@ -229,7 +240,7 @@ dir C:\windows\tasks
 ```
 
 ```powershell
-Get-ScheduledTask | ft TaskName, State
+Get-ScheduledTask | where {$_.TaskPath -notlike "\Microsoft*"} | ft TaskName,TaskPath,State
 ```
 
 What is ran at startup?
