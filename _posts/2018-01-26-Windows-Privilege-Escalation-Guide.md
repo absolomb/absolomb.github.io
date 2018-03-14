@@ -284,6 +284,7 @@ ipconfig /all
 
 ```powershell
 Get-NetIPConfiguration | ft InterfaceAlias,InterfaceDescription,IPv4Address
+Get-DnsClientServerAddress -AddressFamily IPv4 | ft
 ```
 
 What routes do we have?
@@ -434,7 +435,9 @@ Get-ChildItem C:\* -include *.xml,*.ini,*.txt,*.config -Recurse -ErrorAction Sil
 
 # Appendix
 
+## Enumeration Script
 
+I've created a Powershell script which pretty much automates all of the above. You can check it out [here](https://github.com/absolomb/WindowsEnum). 
 
 ## Transferring Files
 
