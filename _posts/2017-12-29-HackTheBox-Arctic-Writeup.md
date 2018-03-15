@@ -7,6 +7,8 @@ tags: [hackthebox]
 I did this box quite some time ago as it was one of the first ones I did when first starting HackTheBox. I recently helped out someone who was working on this box
 so I decided to reorganize my notes, as they were somewhat of a mess and restructure them for a proper writeup.
 
+<!--excerpt--> 
+
 ### Initial Enumeration
 
 First, let's start with a quick nmap scan.
