@@ -4,9 +4,10 @@ title: HackTheBox - Mantis Writeup
 tags: [hackthebox]
 ---
 
-![mantis](/img/mantis.png)
 
 Mantis takes a lot of patience and a good bit of enumeration. The final exploit is also pretty cool as I had never done anything like it before. Really happy to see a domain controller finally pop up in HackTheBox.
+
+![mantis](/img/mantis.png)
 
 ## Enumeration
 

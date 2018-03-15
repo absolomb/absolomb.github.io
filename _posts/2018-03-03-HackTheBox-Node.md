@@ -4,13 +4,9 @@ title: HackTheBox - Node Writeup
 tags: [hackthebox]
 ---
 
-![node](/img/node.png)
-
-<!--more-->
-
 This is probably one of the best boxes released on HTB thus far. Each step felt like a treasure hunt, also I really enjoyed getting more familiar with MongoDB as well. Do yourself a favor and go do this box! 
 
-
+![node](/img/node.png)
 
 ## Enumeration
 
