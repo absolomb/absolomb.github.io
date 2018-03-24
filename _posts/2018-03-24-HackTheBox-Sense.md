@@ -95,7 +95,7 @@ Let's test command injection by running the `id` command and outputting to a txt
 
 As stated in the article we're able to inject shell commands after `database=queues;`. The limitation being that forward slashes aren't going to work. Since we want to view the output of our command we first have to change directories out of the current directory of `/var/db/rrd/` and into `/usr/local/www/`. Then we can run `id` and pipe the output to cmd.txt.
 
-![CMD](sense-cmd.png)
+![CMD](/img/sense-cmd.png)
 
 And we can see we have command execution as root! Now for the tricky part of getting a reverse shell. My first thought was base64 encoding to work around the forward slash issue, but I ran into a problem. Through my testing I also was not able to passthrough any dashes for command line options which means we can't use `base64 -d` to decode any input. So what we can do is use octal encoding, then use `printf` to decode it, and then pipe the output to be executed.
 
