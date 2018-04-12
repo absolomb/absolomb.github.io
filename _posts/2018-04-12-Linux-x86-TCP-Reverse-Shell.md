@@ -4,7 +4,9 @@ title: Linux x86 TCP Reverse Shell
 tags: [slae]
 ---
 
-This is the second assignment for the SLAE which is the Linux x86 TCP Reverse Shell. This one will actually be less complex than the bind shell as there are less things to do and we'll be able to reuse a lot of code from the bind shell. To kick things off I've modified our existing bind shell C code to instead send a reverse shell. I also updated the dup2() portion to loop in the code to make things a bit cleaner. 
+This is the second assignment for the SLAE which is the Linux x86 TCP Reverse Shell. This one will actually be less complex than the bind shell as there are less things to do.. I break down the code pretty thorougly in the bind shell write up, so this one won't be as detailed due to a lot of the code being the same. You can check out the bind shell write up [here](https://www.sploitspren.com/2018-04-10-Linux-x86-TCP-Bind-Shell/).
+
+To kick things off I've modified our existing bind shell C code to instead send a reverse shell. I also updated the dup2() portion to loop in the code to make things a bit cleaner. 
 
 ```c
 #include <sys/socket.h>
@@ -59,7 +61,7 @@ id
 uid=1000(absolomb) gid=1000(absolomb) groups=1000(absolomb),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)
 ```
 
-Now we can begin by breaking down the C code into four sections to help port to Assembly.
+Now we can begin by breaking down the C code into basically four sections to help port to Assembly.
 
 - Creating a socket
 - Connecting to an IP and port
@@ -292,7 +294,7 @@ id
 uid=1000(absolomb) gid=1000(absolomb) groups=1000(absolomb),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)
 ```
 
-Success! Note that you won't always be able to use certain IP addresses due to nulls, however the script will check and tell you. 
+Success! Note that you won't be able to use certain IP addresses due to nulls, however the script will check and tell you. 
 
 This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification: <http://securitytube-training.com/online-courses/securitytube-linux-assembly-expert/>
 
