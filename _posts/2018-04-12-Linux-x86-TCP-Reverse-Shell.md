@@ -1,8 +1,8 @@
--- -
+---
 layout: post
 title: Linux x86 TCP Reverse Shell
 tags: [slae]
--- -
+---
 
 This is the second assignment for the SLAE which is the Linux x86 TCP Reverse Shell. This one will actually be less complex than the bind shell as there are less things to do and we'll be able to reuse a lot of code from the bind shell. To kick things off I've modified our existing bind shell C code to instead send a reverse shell. I also updated the dup2() portion to loop in the code to make things a bit cleaner. 
 
@@ -292,7 +292,7 @@ id
 uid=1000(absolomb) gid=1000(absolomb) groups=1000(absolomb),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)
 ```
 
-Success! Note that you won't always be able to use any IP address due to nulls, however the script will check and tell you. 
+Success! Note that you won't always be able to use certain IP addresses due to nulls, however the script will check and tell you. 
 
 This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification: <http://securitytube-training.com/online-courses/securitytube-linux-assembly-expert/>
 
