@@ -10,7 +10,7 @@ An egg is simply a marker than can be set in front of your shellcode and then lo
 
 So how is this accomplished? Well the famous paper by Skape goes into detail on a few different techniques that can be used. Please check out that resource [here](http://www.hick.org/code/skape/papers/egghunt-shellcode.pdf). 
 
-For the purposes of this writeup we'll be utilizing the sigaction(2) method since it is the most efficient. We'll be using the sigaction() syscall to verify valid memory addresses to search for our egg in.
+For the purposes of this writeup we'll be utilizing the sigaction() method since it is the most efficient. We'll be using the sigaction() syscall to verify valid memory addresses to search for our egg in.
 
 First let's take a look at the sigaction() syscall in the man pages.
 
@@ -42,7 +42,7 @@ So for the purposes of our needs, we'll be putting in various memory addresses i
 
 To get started we'll need to find the syscall number for sigaction() which is defined as 67 in `/usr/include/i386-linux-gnu/asm/unistd_32.h` on our Ubuntu box.
 
-We'll also need to know the return value for an `EFAULT` which can be found in `/usr/include/asm-generic/errno-base.h` as 14.
+We'll also need to know the return value for an `EFAULT` which can be found in `/usr/include/asm-generic/errno-base.h` as 14. Since this is an error code it will actually be returned as a negative 14 thus in hex we get 0xfffffff2 as the value. 
 
 Now that we have a way to search for valid memory we'll need a method to search for our egg efficiently. To accomplish this we'll utilize the SCASD assembly instruction which will compare EAX to a DWORD value located in EDI and set status flags for the result. If the comparison is a success the ZF (zero flag) will be set in EFLAGS.
 
@@ -52,17 +52,17 @@ A summary on what needs to happen.
 
 - We first need to set the ECX register to the bottom of the memory address space for sigaction to check. Page sizes in Linux x86 are 4096 which in hex is 0x1000, this contains nulls so to avoid this we'll need to first put 4095 into ECX then increment by 1 to get what we want.
 
-- We then need to execute sigaction and check for the EFAULT return value.
+- We then need to execute sigaction and check for the EFAULT return value (AL is checked with 0xf2 to save space).
 
-- If EFAULT is returned we need to increment the memory page address and rerun sigaction.
+- If EFAULT is returned we need to increment the memory page address and rerun sigaction to continue searching for valid memory addresses.
 
-- If EFAULT is not returned we know we have a valid address, so we load our egg in EAX, move the current valid address we want to check (currently stored in ECX) to EDI and run SCASD to check if we have a match.
+- If EFAULT is not returned we know we have a valid address, so we load our egg in EAX, move the current valid address we want to check against (currently stored in ECX) to EDI and run SCASD to check if we have a match.
 
 - If there is no match, we need to increment our memory address and redo the process.
 
 - If there is a match, we'll need to check for our egg again with SCASD.
 
-- If there is no match, increment the memory address and redo the process again. If it is a match, we've found our egg and can jump to EDI for execution.
+- If there is no match, increment the memory address and redo the process again. If it is a match again, we've found our egg and can jump to EDI for execution.
 
 
 ## Final Assembly Code

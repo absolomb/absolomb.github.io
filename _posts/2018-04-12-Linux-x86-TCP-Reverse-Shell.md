@@ -4,7 +4,7 @@ title: Linux x86 TCP Reverse Shell
 tags: [slae]
 ---
 
-This is the second assignment for the SLAE which is the Linux x86 TCP Reverse Shell. This one will actually be less complex than the bind shell as there are less things to do.. I break down the code pretty thorougly in the bind shell write up, so this one won't be as detailed due to a lot of the code being the same. You can check out the bind shell write up [here](https://www.sploitspren.com/2018-04-10-Linux-x86-TCP-Bind-Shell/).
+This is the second assignment for the SLAE which is the Linux x86 TCP Reverse Shell. This one will actually be less complex than the bind shell as there are less things to do.. I break down the code pretty thoroughly in the bind shell write up, so this one won't be as detailed due to a lot of the code being the same. You can check out the bind shell write up [here](https://www.sploitspren.com/2018-04-10-Linux-x86-TCP-Bind-Shell/).
 
 To kick things off I've modified our existing bind shell C code to instead send a reverse shell. I also updated the dup2() portion to loop in the code to make things a bit cleaner. 
 
@@ -53,6 +53,7 @@ Let's quickly compile and test the code, starting a netcat listener to catch the
 absolomb@ubuntu:~/SLAE/assignments/2$ gcc reverseshell.c -o reverseshell
 absolomb@ubuntu:~/SLAE/assignments/2$ ./reverseshell
 ```
+
 ```
 absolomb@ubuntu:~$ nc -lvnp 1234
 Listening on [0.0.0.0] (family 0, port 1234)
