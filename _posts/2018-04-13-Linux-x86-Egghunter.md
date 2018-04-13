@@ -54,9 +54,9 @@ A summary on what needs to happen.
 
 - We then need to execute sigaction and check for the EFAULT return value (AL is checked with 0xf2 to save space).
 
-- If EFAULT is returned we need to increment the memory page address and rerun sigaction to continue searching for valid memory addresses.
+- If `EFAULT` is returned we need to increment the memory page address and rerun sigaction to continue searching for valid memory addresses.
 
-- If EFAULT is not returned we know we have a valid address, so we load our egg in EAX, move the current valid address we want to check against (currently stored in ECX) to EDI and run SCASD to check if we have a match.
+- If `EFAULT` is not returned we know we have a valid address, so we load our egg in EAX, move the current valid address we want to check against (currently stored in ECX) to EDI and run SCASD to check if we have a match.
 
 - If there is no match, we need to increment our memory address and redo the process.
 
