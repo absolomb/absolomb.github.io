@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Linux x86 TCP Reverse Shell
+title: Linux x86 Egghunter
 tags: [slae]
 ---
 
