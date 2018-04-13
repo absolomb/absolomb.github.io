@@ -42,7 +42,7 @@ So for the purposes of our needs, we'll be putting in various memory addresses i
 
 To get started we'll need to find the syscall number for sigaction() which is defined as 67 in `/usr/include/i386-linux-gnu/asm/unistd_32.h` on our Ubuntu box.
 
-We'll also need to know the return value for an `EFAULT` which can be found in `/usr/include/asm-generic/errno-base.h` as 14. Since this is an error code it will actually be returned as a negative 14 thus in hex we get 0xfffffff2 as the value. 
+We'll also need to know the return value for an `EFAULT` which can be found in `/usr/include/asm-generic/errno-base.h` as 14. Since this is an error code it will actually be returned as a negative 14 thus in hex we get back 0xfffffff2 as the value. If this doesn't make sense to you check out two's complement to understand the negative number.  
 
 Now that we have a way to search for valid memory we'll need a method to search for our egg efficiently. To accomplish this we'll utilize the SCASD assembly instruction which will compare EAX to a DWORD value located in EDI and set status flags for the result. If the comparison is a success the ZF (zero flag) will be set in EFLAGS.
 
