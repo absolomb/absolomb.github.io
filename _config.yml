@@ -26,7 +26,9 @@ navbar-links:
   Guides: Guides
   Write-Ups: 
   - HackTheBox: HackTheBox
+  - SLAE: SLAE
   - UnderTheWire: UnderTheWire
+  
   About Me: "aboutme"
   
 # Image to show in the navigation bar - image must be a square (width = height)
@@ -212,5 +214,3 @@ prose:
 plugins:
   - jekyll-paginate
 
-# Beautiful Jekyll / Dean Attali
-# 2fc73a3a967e97599c9763d05e564189
