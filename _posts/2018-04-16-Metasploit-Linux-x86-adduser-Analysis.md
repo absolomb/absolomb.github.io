@@ -438,7 +438,8 @@ What's more interesting here is that looking at GDB PEDA, we can see the next in
 
 Let's continue and break just before our next interrupt is called. 
 
-```[----------------------------------registers-----------------------------------]
+```
+[----------------------------------registers-----------------------------------]
 EAX: 0x4 
 EBX: 0x3 
 ECX: 0x40206b ("absolomb:Az3g.zbq9cr7c:0:0::/:/bin/sh\nY\213Q\374j\004X̀j\001X̀")
