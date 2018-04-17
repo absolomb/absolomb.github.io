@@ -331,7 +331,8 @@ int    0x80
 Let's check out the registers right before the interrupt is called. 
 
 
-```[----------------------------------registers-----------------------------------]
+```
+[----------------------------------registers-----------------------------------]
 EAX: 0x5 
 EBX: 0xbffff35c ("/etc//passwd")
 ECX: 0x401 
