@@ -432,6 +432,7 @@ EFLAGS: 0x202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
 [------------------------------------stack-------------------------------------]
 0000| 0xbffff358 --> 0x40206b ("absolomb:Az3g.zbq9cr7c:0:0::/:/bin/sh\nY\213Q\374j\004X̀j\001X̀")
 ```
+
 As you can see on the stack is indeed the string to be written to /etc/passwd.
 
 What's more interesting here is that looking at GDB PEDA, we can see the next instruction is a POP to ECX as well as a MOV into EDX. This POP will push our string into ECX. However just doing a regular disassemble we cannot see this instruction and it also does not show in `ndisasm`. I believe this is due to the length of our string and it's associated instructions not realigning up nicely for disassembly. 
@@ -480,7 +481,7 @@ int    0x80
 ```
 
 ```
-----------------------------------registers-----------------------------------]
+[----------------------------------registers-----------------------------------]
 EAX: 0x1 
 EBX: 0x3 
 ECX: 0x40206b ("absolomb:Az3g.zbq9cr7c:0:0::/:/bin/sh\nY\213Q\374j\004X̀j\001X̀")
