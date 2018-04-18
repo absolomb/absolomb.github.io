@@ -151,7 +151,7 @@ pop    ecx			;
 int    0x80			; execute chmod()
 ```
 
-We have a few instructions setting up the chmod() syscall which is defined as 15 in `/usr/include/i386-linux-gnu/asm/unistd_32.h`. Once again we can see a CALL instruction which pushes the filename being changed to the stack for later use. This is where the start of the garbage looking instructions start.  
+We have a few instructions setting up the chmod() syscall which is defined as 15 in `/usr/include/i386-linux-gnu/asm/unistd_32.h`. Once again we can see a CALL instruction which pushes the filename being changed to the stack for later use.   
 
 ```
 [----------------------------------registers-----------------------------------]
@@ -181,7 +181,7 @@ EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
 
 This is then POP'd off the stack for use in EBX. 
 
-Following that we see a PUSH of 0x1b6. Checking this in python we can see it translates to 0666.
+Following that we see a PUSH of 0x1b6. Checking this in python we can see it translates to 0666 in octal.
 
 ```python
 root@kali:~/SLAE# python3
@@ -192,7 +192,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 '0o666'
 ```
 
-Let's view this in GDB.
+Let's verify everything in GDB before the interrupt is called. 
 
 ```
 [----------------------------------registers-----------------------------------]
@@ -219,7 +219,7 @@ EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
 0000| 0xbffff368 --> 0x0 
 ```
 
-So we have the chmod() syscall all set up as follows:
+And we can see the chmod() syscall is all set up as follows:
 
 ```
 chmod("/etc/shadow", 0600)
