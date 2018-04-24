@@ -72,6 +72,8 @@ So all in all, the shellcode is fairly useless.
 
 For the polymorphic and working version of the shellcode I've used the JMP CALL POP technique for getting the string to be written on the stack. The shellcode is also register independent, null free, and smaller than the original that didn't work (decreased from 86 bytes to 79 bytes). 
 
+My shellcode has also been published to Exploit-DB here: <https://www.exploit-db.com/exploits/44507/>
+
 ```nasm
 global _start
 
@@ -205,6 +207,8 @@ The next shellcode on the menu is shellcode that copies /bin/sh into /tmp and se
 Original shellcode here: <http://shell-storm.org/shellcode/files/shellcode-540.php>
 
 I decided to start from scratch here and simplify things significantly in comparison to the original shellcode. Once again the JMP CALL POP technique was used,  but this time for getting the commmand to be ran onto the stack. Original shellcode for this one was 126 bytes, mine accomplishes the same thing at 74 bytes. 
+
+My shellcode has also been published to Exploit-DB here: <https://www.exploit-db.com/exploits/44510/>
 
 ```nasm
 global _start			
