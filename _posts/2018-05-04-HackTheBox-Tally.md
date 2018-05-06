@@ -814,7 +814,7 @@ HWMon.Dev.#1.....: Temp: 46c Util: 99% Core:1137MHz Mem:2505MHz Bus:16
 
 ```
 
-Tim's password is `simplementeyo`. Let's open up the database. We find three entries. The only one of real interest is some share credentials.
+Tim's password is `simplementeyo`. Let's open up the database with Keepass. We find three entries. The only one of real interest is some share credentials.
 
 ![keepass](/img/tally-keepass.png)
 
@@ -844,7 +844,7 @@ smb: \> ls
 
 Ah yes more folders to dig through. There is quite a bit of stuff here along with a few red herrings. 
 
-First we find some SQL connection information inside the `zz_Migration` folder.
+First we find some SQL connection information inside the `zz_Archived` folder.
 
 ```
 smb: \> cd zz_Archived
@@ -1172,7 +1172,7 @@ update server inventory
 ```
 
 
-To get around this we can use [Veil](https://github.com/Veil-Framework/Veil). I used the `python/shellcode_inject/aes_encrypt.py` payload to send a `windows/meterpreter/reverse_tcp` connection. 
+To get around this we can use [Veil](https://github.com/Veil-Framework/Veil). I used the `python/shellcode_inject/aes_encrypt.py` payload for a `windows/meterpreter/reverse_tcp` connection. 
 
 After generating the exe we can upload via FTP to the `Intranet` folder. We know we have write permissions there from the instructions on the SharePoint Finance page from earlier.
 
@@ -1283,7 +1283,7 @@ What is interesting is Sarah's account is running as the SQL service account. So
 
 <https://foxglovesecurity.com/2016/09/26/rotten-potato-privilege-escalation-from-service-accounts-to-system/>
 
-I won't go into the details on how this exploit works, the article explains it far better than I ever could.
+I won't go into the details on how this exploit works, the article above explains it far better than I ever could.
 
 Let's check our privileges with meterpreter.
 
