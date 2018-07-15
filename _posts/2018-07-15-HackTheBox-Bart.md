@@ -38,17 +38,17 @@ Only two ports to work with, port 5985 is for WinRM so hopefully we'll be able t
 
 If we check out the web server in a browser we get a 302 response, however we can see the virtual host name in the Location header.
 
-![302](bart-302.png)
+![302](/img/bart-302.png)
 
 If we add an entry in our /etc/hosts file for that domain name and IP we are able to browse the site.
 
 Scrolling down on the page we find some possible users to target.
 
-![team](bart-team.png)
+![team](/img/bart-team.png)
 
 Even more interesting is if we check the source code of the page we see another user named Harvey, who's been commented out.
 
-![source](bart-source.png)
+![source](/img/bart-source.png)
 
 The user's email addresses in the mailto field is probably going to reflect their username on the system if it exists. So we have:
 
