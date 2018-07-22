@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HackTheBox - Bart Writeup
+title: HackTheBox - Aragog Writeup
 tags: [hackthebox]
 ---
 
