@@ -4,7 +4,7 @@
 # baseurl is the website's URL without the hostname
 
 # If you are building a simple GitHub user page (http://username.github.io) then use these settings:
-url: "http://www.sploitspren.com"
+url: "http://www.absolomb.com"
 baseurl: ""
 
 # If you are building a GitHub project page then use these settings:
@@ -58,7 +58,7 @@ avatar: "/img/bomb.jpg"
 author:
   name: Ryan McFarland
   github: absolomb
-  email: YmxvZ0BzcGxvaXRzcHJlbi5jb20=
+  email: YmxvZ0BhYnNvbG9tYi5jb20=
   
 
 # Select which links to show in the footer
