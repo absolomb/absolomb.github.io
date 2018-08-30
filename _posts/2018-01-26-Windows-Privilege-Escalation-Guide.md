@@ -4,8 +4,6 @@ title: Windows Privilege Escalation Guide
 tags: [guides]
 ---
 
-## Introduction
-
 Privilege escalation always comes down to proper enumeration. But to accomplish proper enumeration you need to know what to check and look for. This takes familiarity with systems that normally comes along with experience. At first privilege escalation can seem like a daunting task, but after a while you start to filter through what is normal and what isn't. It eventually becomes easier to know what to look for rather than digging through everything hoping to find that needle in the haystack. Hopefully this guide will provide a good foundation to build upon and get you started. 
 
 This guide is influenced by [g0tm1lk's Basic Linux Privilege Escalation](https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/), which at some point you should have already seen and used. I wanted to try to mirror his guide, except for Windows. So this guide will mostly focus on the enumeration aspect.
@@ -126,6 +124,13 @@ Anything interesting in Credential Manager?
 
 ```
 cmdkey /list
+dir C:\Users\username\AppData\Local\Microsoft\Credentials\
+dir C:\Users\username\AppData\Roaming\Microsoft\Credentials\
+```
+
+```powershell
+Get-ChildItem -Hidden C:\Users\username\AppData\Local\Microsoft\Credentials\
+Get-ChildItem -Hidden C:\Users\username\AppData\Roaming\Microsoft\Credentials\
 ```
 
 Can we access SAM and SYSTEM files?
