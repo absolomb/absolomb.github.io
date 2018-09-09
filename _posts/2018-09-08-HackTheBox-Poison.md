@@ -4,7 +4,7 @@ title: HackTheBox - Poison Writeup
 tags: [hackthebox]
 ---
 
-Pretty fun and quick box with some creative thinking required for getting the initial shell. 
+Poision is a pretty straight forward box overall but did include a couple of unique things which made it fun. 
 
 ### Initial Enumeration
 

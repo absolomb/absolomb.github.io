@@ -4,6 +4,8 @@ title: HackTheBox - Stratosphere Writeup
 tags: [hackthebox]
 ---
 
+Pretty fun and quick box with some creative thinking required for getting the initial shell. 
+
 ## Enumeration
 
 Nmap to kick things off.
