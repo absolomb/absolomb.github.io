@@ -15,7 +15,7 @@ _Note: I am not an expert and still learning myself._
 In each section I first provide the old trusted CMD commands and then also a Powershell equivalent for posterity sake. It's good to have both tools under your belt and Powershell is much more versatile for scripting than the traditional CMD. However there isn't a Powershell equivalent for everything (or CMD is still simply easier/better on certain things), so some sections will only contain regular CMD commands. 
 
 
-__Version 1.2 - Last updated July 2018__
+__Version 1.3 - Last updated October 2018__
 
 ## Operating System
 
